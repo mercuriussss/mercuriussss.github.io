@@ -49,7 +49,7 @@ rss:
 
 footer:
   # Specify the date when the site was setup. If not defined, current year will be used.
-  since: 
+  since:
 
   # Icon between year and copyright info.
   icon:
@@ -635,9 +635,9 @@ changyan:
 # You can get your appid and appkey from https://leancloud.cn
 # More info available at https://valine.js.org
 valine:
-  enable: false # When enable is set to be true, leancloud_visitors is recommended to be closed for the re-initialization problem within different leancloud adk version.
-  appid:  # your leancloud application appid
-  appkey:  # your leancloud application appkey
+  enable: true # When enable is set to be true, leancloud_visitors is recommended to be closed for the re-initialization problem within different leancloud adk version.
+  appid:  DC12p0SGSbSiJuSeyEUvKTAj-gzGzoHsz # your leancloud application appid
+  appkey: 9FxBDFs6RQoLSv4G3YH5mzUX # your leancloud application appkey
   notify: false # mail notifier, See: https://github.com/xCss/Valine/wiki
   verify: false # Verification code
   placeholder: Just go go # comment box placeholder
@@ -1214,8 +1214,8 @@ css: css
 js: js
 images: images
 
-# 来必应评论
-livere_uid: MTAyMC8zODEwNC8xNDYzNA==
+## 来必应评论
+#livere_uid: MTAyMC8zODEwNC8xNDYzNA==
 
 # 文章末尾添加“本文结束”标记
 passage_end_tag:
