@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/project/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+
+    <meta name="description" content="一、类的生命周期 图5-1 Java类的生命周期  ​		注意：解析阶段不一定按照顺序来执行，它可以在初始化阶段之后再开始，这是为了支持Java语言的运动时绑定	（也称之为动态绑定或晚期绑定） 二、类的初始化有 6 种情况会触发类的初始化 遇到new、getstatic、putstatic或invokestatic这4条字节码指令 使用java.lang.reflect包的方法对类进行反射调用的时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="五、Java类加载机制">
+<meta property="og:url" content="https://mercuriussss.github.io/project/2019/09/17/jvm-5/index.html">
+<meta property="og:site_name" content="量子猫">
+<meta property="og:description" content="一、类的生命周期 图5-1 Java类的生命周期  ​		注意：解析阶段不一定按照顺序来执行，它可以在初始化阶段之后再开始，这是为了支持Java语言的运动时绑定	（也称之为动态绑定或晚期绑定） 二、类的初始化有 6 种情况会触发类的初始化 遇到new、getstatic、putstatic或invokestatic这4条字节码指令 使用java.lang.reflect包的方法对类进行反射调用的时">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-5/1.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-5/2.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-5/clipboard.png">
+<meta property="article:published_time" content="2019-09-17T13:40:30.000Z">
+<meta property="article:modified_time" content="2023-02-13T09:41:19.579Z">
+<meta property="article:author" content="量子猫">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mercuriussss.github.io/project/jvm-5/1.png">
+
+
+<link rel="canonical" href="https://mercuriussss.github.io/project/2019/09/17/jvm-5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2019/09/17/jvm-5/","path":"2019/09/17/jvm-5/","title":"五、Java类加载机制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>五、Java类加载机制 | 量子猫</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/project/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/project/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">量子猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们所度过的每一个日常,也许就是连续发生的奇迹</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">一、类的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">二、类的初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89-6-%E7%A7%8D%E6%83%85%E5%86%B5%E4%BC%9A%E8%A7%A6%E5%8F%91%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">有 6 种情况会触发类的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E4%BC%9A%E8%A7%A6%E5%8F%91%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">2.2.</span> <span class="nav-text">不会触发类初始化的情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">三、生命周期具体过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%8A%A0%E8%BD%BD"><span class="nav-number">3.1.</span> <span class="nav-text">1、加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81"><span class="nav-number">3.2.</span> <span class="nav-text">2、验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E5%87%86%E5%A4%87"><span class="nav-number">3.3.</span> <span class="nav-text">3、准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E8%A7%A3%E6%9E%90"><span class="nav-number">3.4.</span> <span class="nav-text">4、解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.5.</span> <span class="nav-text">5、初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">四、Java类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%90%AB%E4%B9%89"><span class="nav-number">4.1.</span> <span class="nav-text">1、含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E7%A1%AE%E5%AE%9A%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">2、确定唯一性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.3.</span> <span class="nav-text">3、类加载器的主要类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.</span> <span class="nav-text">4、双亲委派模型</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="量子猫"
+      src="/project/images/xz.jpg">
+  <p class="site-author-name" itemprop="name">量子猫</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/project/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2019/09/17/jvm-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="name" content="量子猫">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子猫">
+      <meta itemprop="description" content="Stay Hungry, Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="五、Java类加载机制 | 量子猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          五、Java类加载机制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-17 21:40:30" itemprop="dateCreated datePublished" datetime="2019-09-17T21:40:30+08:00">2019-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 17:41:19" itemprop="dateModified" datetime="2023-02-13T17:41:19+08:00">2023-02-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="一、类的生命周期"><a href="#一、类的生命周期" class="headerlink" title="一、类的生命周期"></a>一、类的生命周期</h2><p><img src="/project/jvm-5/1.png" alt="1.png"></p>
+<div align="center" style="font-size:12px">图5-1 Java类的生命周期</div>
+
+<p>​		注意：解析阶段不一定按照顺序来执行，它可以在初始化阶段之后再开始，这是为了支持Java语言的运动时绑定	（也称之为动态绑定或晚期绑定）</p>
+<h2 id="二、类的初始化"><a href="#二、类的初始化" class="headerlink" title="二、类的初始化"></a>二、类的初始化</h2><h3 id="有-6-种情况会触发类的初始化"><a href="#有-6-种情况会触发类的初始化" class="headerlink" title="有 6 种情况会触发类的初始化"></a>有 6 种情况会触发类的初始化</h3><ol>
+<li>遇到new、getstatic、putstatic或invokestatic这4条字节码指令</li>
+<li>使用java.lang.reflect包的方法对类进行反射调用的时候</li>
+<li>当初始化一个类的时候，若发现其父类还未初始化，则需先触发父类的初始化</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类（即包括main方法的那个类），虚拟机会先初始化这个类</li>
+<li>当使用JDK 7 的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄，并且该方法句柄所对应的类没有进行过初始化，则需要先触发其初始化</li>
+<li>当一个接口中定义了JDK 8 新加入的默认方法（被default关键字修饰的接口方法）时，如果有该接口的实现类发生了初始化，那该接口要在其之前被初始化</li>
+</ol>
+<h3 id="不会触发类初始化的情况"><a href="#不会触发类初始化的情况" class="headerlink" title="不会触发类初始化的情况"></a>不会触发类初始化的情况</h3><ol>
+<li>通过子类引用父类的静态字段，只会触发父类的初始化而不会导致子类被初始化，至于会不会触发子类的加载和验证，这个要取决于虚拟机的具体实现</li>
+<li>通过数组定义来引用类，不会触发此类的初始化，例如 Test[] test &#x3D; new Test[450]</li>
+<li>引用一个类的常量也不会触发类的初始化，因为常量在编译阶段会存入调用类的常量池中，本质上并没有直接引用到定义常量的类</li>
+</ol>
+<h2 id="三、生命周期具体过程"><a href="#三、生命周期具体过程" class="headerlink" title="三、生命周期具体过程"></a>三、生命周期具体过程</h2><h3 id="1、加载"><a href="#1、加载" class="headerlink" title="1、加载"></a>1、加载</h3><p>​		该阶段虚拟机要完成三件事</p>
+<ol>
+<li>通过一个类的全定名来获取定义此类的二进制字节流（不一定要从一个Class文件中获取，也可以从ZIP包、网络、动态生成、数据库等渠道获取）</li>
+<li>将这个字节流的二进制内容加载到虚拟机的方法区</li>
+<li>在内存中生成一个java.lang.Class对象，作为方法区这个类的各种数据的访问入口</li>
+</ol>
+<p>&amp;emsp;&amp;emsp;相对于类加载的其他阶段而言，加载阶段（准确地说，是加载阶段获取类的二进制字节流的动作）是可控性最强的阶段，因为开发人员既可以使用系统提供的类加载器来完成加载，也可以自定义自己的类加载器来完成加载。</p>
+<blockquote>
+<p>注意：加载阶段与连接阶段的部分内容（如一部分字节码文件格式验证动作）是交叉进行的，加载阶段尚未完成，连接阶段可能就开始了，但这些夹在加载阶段之中进行的动作，仍然属于连接阶段的内容，这两个阶段的开始时间仍然保持着固定的先后顺序</p>
+</blockquote>
+<h3 id="2、验证"><a href="#2、验证" class="headerlink" title="2、验证"></a>2、验证</h3><p>​	该阶段主要包括以下4个阶段，目的是为了验证Class文件的二进制内容对于虚拟机来说是否合法、安全。</p>
+<ul>
+<li><p><strong>文件格式验证</strong>，确保字节流符合Class文件格式的规范并且能被当前版本的JVM处理。</p>
+<p>例如：验证魔数、验证主次版本号、检查常量tag标志等等</p>
+</li>
+<li><p><strong>元数据验证</strong>，主要进行语义校验，确保字节码的语义描述符合《Java语言规范》。</p>
+<p>例如：该类是否有父类、是否错误继承了final类、是否实现了其父类或接口要求的所有方法等等</p>
+</li>
+<li><p><strong>字节码验证</strong>，主要通过数据流和控制流分析，确保程序语义合法且符合逻辑，以及确保类的方法体在运行时不会做出危害JVM安全的行为。</p>
+<p>例如：验证类型转换是否合法、保证任意时刻栈帧的数据类型与指令代码序列都能配合工作（例如不会出现类似于“在栈帧放置了个int类型的数据，使用时却按照long类型来加载到本地变量表里”）等等</p>
+</li>
+<li><p><strong>符号引用验证</strong>，发生于虚拟机将符号引用转化为直接引用的时候（转换动作发生在解析阶段）。</p>
+<p>例如：验证引用的类是否存在，验证引用的成员变量、类、方法是否能被当前类访问等等。</p>
+</li>
+</ul>
+<p>​	该验证的主要目的是为了确保解析行为能够正常执行，若无法通过符号引用验证，可能会抛出java.lang.IncompatibleClassChangeError异常的子类，如java.lang.IllegalAccessError、java.lang.NoSuchFieldError、java.lang.NoSuchMethodError等</p>
+<h3 id="3、准备"><a href="#3、准备" class="headerlink" title="3、准备"></a>3、准备</h3><p>该阶段会正式为类成员变量（即static成员变量）分配内存，并将它们的初始值设置为默认值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static int a = 123;</span><br></pre></td></tr></table></figure>
+
+<p>例如上述的类变量定义，在准备阶段后，a在内存中的值仍然为0，赋予123这个行为是在初始化<br>阶段才执行的</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>零值</th>
+<th>数据类型</th>
+<th>零值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>int</td>
+<td>0</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>long</td>
+<td>0L</td>
+<td>float</td>
+<td>0.0f</td>
+</tr>
+<tr>
+<td>short</td>
+<td>(short)0</td>
+<td>double</td>
+<td>0.0d</td>
+</tr>
+<tr>
+<td>char</td>
+<td>‘\u0000’</td>
+<td>reference</td>
+<td>null</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>(byte)0</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>上面该表格为Java基本数据类型的零值，不过只要类字段的字段属性表中存在ConstantValue属性，那即使在准备阶段，该类变量也能初始化为指定的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static final int a = 123;</span><br></pre></td></tr></table></figure>
+
+<p>例如这次的a被final修饰符所修饰，变成一个常量，那在准备阶段完成时，它就不是0而是123了</p>
+<h3 id="4、解析"><a href="#4、解析" class="headerlink" title="4、解析"></a>4、解析</h3><p>&amp;emsp;&amp;emsp;虚拟机会将常量池内的符号引用替换为直接引用，该解析主要针对的是类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符7类符号引用。</p>
+<p>​		虚拟机规范之中并没有规定解析阶段的具体发生时间，也就是说，在转换成直接引用后，可以触发校验阶段的符号引用验证，从这也能看出来类加载的各个阶段在实际进行时可能是交错执行的</p>
+<h3 id="5、初始化"><a href="#5、初始化" class="headerlink" title="5、初始化"></a>5、初始化</h3><p>​		初始化阶段会开始在内存中构造一个Class对象来表示该类，即执行类构造器<clinit>()方法的过程需注意的是，<clinit>()方法跟<init>()方法并不相同</p>
+<ul>
+<li><clinit>()方法中执行的是对所有类变量的赋值动作和静态语句块(static{}块)中的语句合并操作，并且编译器收集的顺序是由语句在源文件中出现的顺序决定的</li>
+<li>虚拟机会确保先执行父类的<clinit>()方法，因此第一个被执行的类肯定是java.lang.Object，并且父类中定义的静态语句块要优先于子类的变量赋值操作</li>
+<li>如果一个类中没有static语句块，也没有对类变量的赋值操作，那该类就不会生成<clinit>()方法</li>
+<li>接口中不能使用静态代码块，但仍然有变量初始化的赋值操作，因此接口与类一样都会生成<clinit>()方法，但接口与类不同的是，执行接口的<clinit>()方法不需要先执行父接口的<clinit>()方法，因为只有当父接口中定义的变量被使用时，父接口才会被初始化。此外，接口的实现类在初始化时也一样不会执行接口的<clinit>()方法。</li>
+<li>虚拟机会保证<clinit>()方法的执行在多线程中是安全的，如果多个线程去同时初始化一个类，那么只有一个线程会去执行该类的<clinit>()方法，其他线程都要阻塞等待</li>
+</ul>
+<h2 id="四、Java类加载器"><a href="#四、Java类加载器" class="headerlink" title="四、Java类加载器"></a>四、Java类加载器</h2><h3 id="1、含义"><a href="#1、含义" class="headerlink" title="1、含义"></a>1、含义</h3><p>​		类加载器（class loader）是用来将Java类加载到虚拟机中的代码模块，加载一个Class文件首先需要获取该Class的二进制字节流，这个过程可以通过自定义类加载器来实现，从而可以通过多种灵活的途径获取Class的二进制字节流。</p>
+<h3 id="2、确定唯一性"><a href="#2、确定唯一性" class="headerlink" title="2、确定唯一性"></a>2、确定唯一性</h3><p>​		每个加载器都有各自独立的类名称空间，一个类的唯一性要通过其类加载器来确定。判断两个类是否相等，只有这两个类是由同一个类加载器加载的前提下才有意义，否则，即使两个类来自于同一个Class文件，被同一个虚拟机加载，只要加载它们的类加载器不同，那这两个类就不相同</p>
+<h3 id="3、类加载器的主要类型"><a href="#3、类加载器的主要类型" class="headerlink" title="3、类加载器的主要类型"></a>3、类加载器的主要类型</h3><ul>
+<li>启动类加载器（Bootstrap ClassLoader）<br>该加载器使用C++语言实现，是虚拟机自身的一部分，主要作用是加载<JAVA_HOME>\lib目录中的系统类库（如.rt.jar）</li>
+<li>扩展类加载器（Extension ClassLoader）<br>该加载器由sun.misc.Launcher$ExtClassLoader实现，负责加载<JAVA_HOME>\lib\ext目录中的，或者被java.ext.dirs系统变量所指定的路径中的所有类库</li>
+<li>应用程序类加载器（Application ClassLoader）<br>该加载器由sun.misc.Launcher$AppClassLoader实现，负责加载用户类路径（ClassPath）上所指定的类库，若应用程序没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器</li>
+</ul>
+<h3 id="4、双亲委派模型"><a href="#4、双亲委派模型" class="headerlink" title="4、双亲委派模型"></a>4、双亲委派模型</h3><p><img src="/project/jvm-5/2.png" alt="2.png"></p>
+<div align="center" style="font-size:12px">图5-2 双亲委派模型</div>
+
+<p>​		双亲委派模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器。这里类加载器之间的父子关系一般不会以继承的关系来实现，而是用组合关系来复用父类加载器的代码</p>
+<p>​		每个类加载器都有自己的加载缓存，当一个类被加载后就会放入缓存，等下次加载时会直接从缓存中返回。</p>
+<p>​		工作流程：当一个类加载器去加载一个Class时，它会先委派自己的父类加载器去加载，每层都是这样，因此所有的加载器请求最终都应该传到顶层的启动类加载器中，只有父类加载器无法加载时，子类才会尝试自己去加载，并将其放进自己的缓存中。</p>
+<p>​		因此，加载过程可以看成自底向上检查类是否已经加载，然后自顶向下加载类，如下图所示。</p>
+<p><img src="/project/jvm-5/clipboard.png" alt="img"></p>
+<div align="center" style="font-size:12px">图5-3 双亲委派模型的加载过程</div>
+
+<p>​		好处：双亲委派模型可以保证重要的系统Class始终由启动类加载器加载，确保Java运行环境的稳定性和正确性，避免用户自己编写的类动态替换 Java 的一些核心类（比如 String类）同时也避免了重复加载，因为 JVM 中区分不同类，不仅仅是根据类名，相同的 class 文件被不同的 ClassLoader 加载就是不同的两个类，如果相互转型的话会抛java.lang.ClassCaseException</p>
+<p>参考自：<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jqctop1/">https://www.cnblogs.com/jqctop1/</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bokeyuanlongbin/p/9071629.html">https://www.cnblogs.com/bokeyuanlongbin/p/9071629.html</a><br>《深入理解Java虚拟机》</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/project/tags/Java/" rel="tag"># Java</a>
+              <a href="/project/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/project/2019/09/16/jvm-4/" rel="prev" title="四、class文件的文件头">
+                  <i class="fa fa-chevron-left"></i> 四、class文件的文件头
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/project/2019/09/18/jvm-6/" rel="next" title="六、栈帧结构">
+                  六、栈帧结构 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">量子猫</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/project/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/project/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+
+    <meta name="description" content="对象的创建1.使用指令创建对象​		创建对象有多种方法，最常见的便是用New关键字创建对象，除此之外还可以使用反射机制（Class类的newInstance、使用Constructor类的newInstance方法）、Clone方法、反序列化等方式创建对象。 ​		由类加载器负责根据一个类的全限定名来读取此类的二进制字节流到JVM内部，并存储在运行时内存区的方法区，然后将其转换为一个与目标类型对应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二、Java对象的创建、内存布局和访问">
+<meta property="og:url" content="https://mercuriussss.github.io/project/2019/09/11/jvm-2/index.html">
+<meta property="og:site_name" content="量子猫">
+<meta property="og:description" content="对象的创建1.使用指令创建对象​		创建对象有多种方法，最常见的便是用New关键字创建对象，除此之外还可以使用反射机制（Class类的newInstance、使用Constructor类的newInstance方法）、Clone方法、反序列化等方式创建对象。 ​		由类加载器负责根据一个类的全限定名来读取此类的二进制字节流到JVM内部，并存储在运行时内存区的方法区，然后将其转换为一个与目标类型对应">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-2/1.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-2/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-2/2.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-2/3.png">
+<meta property="article:published_time" content="2019-09-10T16:52:31.000Z">
+<meta property="article:modified_time" content="2023-02-13T09:41:19.567Z">
+<meta property="article:author" content="量子猫">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mercuriussss.github.io/project/jvm-2/1.png">
+
+
+<link rel="canonical" href="https://mercuriussss.github.io/project/2019/09/11/jvm-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2019/09/11/jvm-2/","path":"2019/09/11/jvm-2/","title":"二、Java对象的创建、内存布局和访问"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>二、Java对象的创建、内存布局和访问 | 量子猫</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/project/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/project/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">量子猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们所度过的每一个日常,也许就是连续发生的奇迹</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text">1.使用指令创建对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%A3%80%E6%9F%A5"><span class="nav-number">1.2.</span> <span class="nav-text">2.类加载检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.3.</span> <span class="nav-text">3.类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="nav-number">1.4.</span> <span class="nav-text">4.分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%B6%E5%80%BC"><span class="nav-number">1.5.</span> <span class="nav-text">5.初始化零值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E8%AE%BE%E7%BD%AE%E5%AF%B9%E8%B1%A1%E5%A4%B4%E4%BF%A1%E6%81%AF"><span class="nav-number">1.6.</span> <span class="nav-text">6.设置对象头信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%89%A7%E8%A1%8Cinit%E6%96%B9%E6%B3%95"><span class="nav-number">1.7.</span> <span class="nav-text">7.执行init方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">对于内存分配的两种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">对于内存分配的并发问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E4%BF%9D%E9%9A%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">两种保障方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81CAS-%E5%A4%B1%E8%B4%A5%E9%87%8D%E8%AF%95"><span class="nav-number">3.1.1.</span> <span class="nav-text">1、CAS+失败重试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81TLAB"><span class="nav-number">3.1.2.</span> <span class="nav-text">2、TLAB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%85%B3%E4%BA%8ETLAB%E7%9A%84%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.3.</span> <span class="nav-text">3、关于TLAB的补充说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-number">4.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="nav-number">4.1.</span> <span class="nav-text">1.对象头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.</span> <span class="nav-text">2.实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85"><span class="nav-number">4.3.</span> <span class="nav-text">3.对齐填充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="nav-number">5.</span> <span class="nav-text">对象的访问定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E5%8F%A5%E6%9F%84"><span class="nav-number">5.1.</span> <span class="nav-text">1.使用句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88"><span class="nav-number">5.2.</span> <span class="nav-text">2.使用直接指针</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="量子猫"
+      src="/project/images/xz.jpg">
+  <p class="site-author-name" itemprop="name">量子猫</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/project/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2019/09/11/jvm-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="name" content="量子猫">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子猫">
+      <meta itemprop="description" content="Stay Hungry, Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="二、Java对象的创建、内存布局和访问 | 量子猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          二、Java对象的创建、内存布局和访问
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-11 00:52:31" itemprop="dateCreated datePublished" datetime="2019-09-11T00:52:31+08:00">2019-09-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 17:41:19" itemprop="dateModified" datetime="2023-02-13T17:41:19+08:00">2023-02-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><h3 id="1-使用指令创建对象"><a href="#1-使用指令创建对象" class="headerlink" title="1.使用指令创建对象"></a>1.使用指令创建对象</h3><p>​		创建对象有多种方法，最常见的便是用New关键字创建对象，除此之外还可以使用反射机制（Class类的newInstance、使用Constructor类的newInstance方法）、Clone方法、反序列化等方式创建对象。</p>
+<p>​		由类加载器负责根据一个类的全限定名来读取此类的二进制字节流到JVM内部，并存储在运行时内存区的方法区，然后将其转换为一个与目标类型对应的java.lang.Class对象实例。</p>
+<p>​		</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Student</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span>, Serializable &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">(Integer id)</span> &#123;<span class="built_in">this</span>.id = id;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;<span class="keyword">return</span> <span class="string">&quot;Student [id=&quot;</span> + id + <span class="string">&quot;]&quot;</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用new关键字创建对象</span></span><br><span class="line">        <span class="type">Student</span> <span class="variable">stu1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">123</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用Class类的newInstance方法创建对象</span></span><br><span class="line">        <span class="comment">// 对应类必须具有无参构造方法，且只有这一种创建方式</span></span><br><span class="line">        <span class="type">Student</span> <span class="variable">stu2</span> <span class="operator">=</span> Student.class.newInstance();    </span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用Constructor类的newInstance方法创建对象</span></span><br><span class="line">        Constructor&lt;Student&gt; constructor = Student.class</span><br><span class="line">                .getConstructor(Integer.class);   <span class="comment">// 调用有参构造方法</span></span><br><span class="line">        <span class="type">Student</span> <span class="variable">stu3</span> <span class="operator">=</span> constructor.newInstance(<span class="number">123</span>);   </span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用Clone方法创建对象</span></span><br><span class="line">        <span class="type">Student</span> <span class="variable">stu4</span> <span class="operator">=</span> (Student) stu3.clone();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用(反)序列化机制创建对象</span></span><br><span class="line">        <span class="comment">// 写对象</span></span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">output</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;student.bin&quot;</span>));</span><br><span class="line">        output.writeObject(stu4);</span><br><span class="line">        output.close();</span><br><span class="line">        <span class="comment">// 读取对象</span></span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">input</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(</span><br><span class="line">                <span class="string">&quot;student.bin&quot;</span>));</span><br><span class="line">        <span class="type">Student</span> <span class="variable">stu5</span> <span class="operator">=</span> (Student) input.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-类加载检查"><a href="#2-类加载检查" class="headerlink" title="2.类加载检查"></a>2.类加载检查</h3><p>​		根据new的参数检查能否在常量池中定位到一个类的符号引用（即类的带路径全名），并且检查这个符号引用代表的类是否已被加载、解析和初始化过，即该类有没被加载到方法区</p>
+<h3 id="3-类加载"><a href="#3-类加载" class="headerlink" title="3.类加载"></a>3.类加载</h3><p>​		若找不到相应的符号引用，即该类没被加载到方法区，则先进行类加载，若该类已被加载过，则继续</p>
+<h3 id="4-分配内存"><a href="#4-分配内存" class="headerlink" title="4.分配内存"></a>4.分配内存</h3><ul>
+<li>获取被加载类的对象所需内存大小（类加载后便可获知）</li>
+<li>检查是否在TLAB中分配内存，若是则在TLAB中分配内存，否则就在Eden中分配内存（少数情况下也可能会直接分配给老年代中，例如大对象就直接进入老年代）</li>
+</ul>
+<h3 id="5-初始化零值"><a href="#5-初始化零值" class="headerlink" title="5.初始化零值"></a>5.初始化零值</h3><p>​		将分配到的空间全部初始化为零值（不包括对象头），例如int&#x3D;0  string&#x3D;null boolean&#x3D;false，目前用户设定的初始值还未执行</p>
+<h3 id="6-设置对象头信息"><a href="#6-设置对象头信息" class="headerlink" title="6.设置对象头信息"></a>6.设置对象头信息</h3><p>​		初始化零值完成之后，虚拟机要对对象进行必要的设置，例如这个对象是那个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的 GC 分代年龄等信息，这些信息存放在对象头（Object Header）中。另外，根据虚拟机当前运行状态的不同，如是否启用偏向锁等，对象头会有不同的设置方式。</p>
+<h3 id="7-执行init方法"><a href="#7-执行init方法" class="headerlink" title="7.执行init方法"></a>7.执行init方法</h3><p>​		执行完上面的步骤之后，从虚拟机来看已经创建成功了，但对于Java程序而言还未真正完成，还需要调用init方法，把对象按照程序员的意愿去分配初始值，这样一个真正可用的对象才算创建完成</p>
+<ul>
+<li>如果对象是通过 clone() 方法创建的，那么 JVM 把原来被克隆的对象的实例变量的值拷贝到新对象中；</li>
+<li>如果对象是通过 ObjectInputStream 类的 readObject() 方法创建的，那么 JVM 通过从输入流中读入的序列化数据来初始化那些非暂时性(non-transient)的实例变量；</li>
+<li>如果实例变量在声明时被显式初始化，那么就把初始化值赋给实例变量，接着再执行构造方法。这是最常见的初始化对象的方式。</li>
+</ul>
+<h2 id="对于内存分配的两种方式"><a href="#对于内存分配的两种方式" class="headerlink" title="对于内存分配的两种方式"></a>对于内存分配的两种方式</h2><p><img src="/project/jvm-2/1.png" alt="1.png"></p>
+<div align="center" style="font-size:12px">图2-1 内存分配的两种方式</div>
+
+<h2 id="对于内存分配的并发问题"><a href="#对于内存分配的并发问题" class="headerlink" title="对于内存分配的并发问题"></a>对于内存分配的并发问题</h2><h3 id="两种保障方式"><a href="#两种保障方式" class="headerlink" title="两种保障方式"></a>两种保障方式</h3><p>​		在创建对象的时候有一个很重要的问题，就是线程安全，因为在实际开发过程中，创建对象是很频繁的事情，作为虚拟机来说，必须要保证线程是安全的，通常来讲，虚拟机采用两种方式来保证线程安全：</p>
+<h4 id="1、CAS-失败重试"><a href="#1、CAS-失败重试" class="headerlink" title="1、CAS+失败重试"></a>1、CAS+失败重试</h4><p>CAS是乐观锁的一种实现方式。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。虚拟机采用 CAS 配上失败重试的方式保证更新操作的原子性。</p>
+<h4 id="2、TLAB"><a href="#2、TLAB" class="headerlink" title="2、TLAB"></a>2、TLAB</h4><p>为每一个线程预先在 Eden 区分配一块儿内存，JVM 在给线程中的对象分配内存时，首先在 TLAB 分配，当对象大于 TLAB 中的剩余内存或 TLAB 的内存已用尽时，再采用上述的 CAS 进行内存分配</p>
+<h4 id="3、关于TLAB的补充说明"><a href="#3、关于TLAB的补充说明" class="headerlink" title="3、关于TLAB的补充说明"></a>3、关于TLAB的补充说明</h4><p>&amp;emsp;&amp;emsp;JVM在内存新生代Eden Space中开辟了一小块线程私有的区域，称作TLAB（Thread-local allocation buffer，线程本地分配缓存区）。默认设定为占用Eden Space的1%。在Java程序中很多对象都是小对象且用过即丢，它们不存在线程共享也适合被快速GC，所以对于小对象通常JVM会优先分配在TLAB上，并且TLAB上的分配由于是线程私有所以没有锁开销。因此在实践中分配多个小对象的效率通常比分配一个大对象的效率要高。</p>
+<p>&amp;emsp;&amp;emsp;也就是说，Java中每个线程都会有自己的缓冲区称作TLAB（Thread-local allocation buffer），每个TLAB都只有一个线程可以操作，TLAB结合bump-the-pointer技术可以实现快速的对象分配，而不需要任何的锁进行同步，也就是说，在对象分配的时候不用锁住整个堆，而只需要在自己的缓冲区分配即可。</p>
+<h2 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h2><h3 id="1-对象头"><a href="#1-对象头" class="headerlink" title="1.对象头"></a>1.对象头</h3><p>​		Hotspot 虚拟机的对象头包括两部分信息，第一部分用于存储对象自身的自身运行时数据（哈希码、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等等），这部分数据称为“Mark Word“；另一部分是Class对象的类型指针（Klass Pointer），即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
+<p><img src="/project/jvm-2/clipboard.png" alt="img"></p>
+<div align="center" style="font-size:12px">图2-2 64位JVM对象结构描述</div>
+
+<h3 id="2-实例数据"><a href="#2-实例数据" class="headerlink" title="2.实例数据"></a>2.实例数据</h3><p>&amp;emsp;&amp;emsp;实例数据部分是对象真正存储的有效信息，也是在程序中所定义的各种类型的字段内容。</p>
+<h3 id="3-对齐填充"><a href="#3-对齐填充" class="headerlink" title="3.对齐填充"></a>3.对齐填充</h3><p>&amp;emsp;&amp;emsp;对齐填充部分不是必然存在的，也没有什么特别的含义，仅仅起占位作用。 因为 Hotspot 虚拟机的自动内存管理系统要求对象起始地址必须是8字节的整数倍，换句话说就是对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的倍数（1倍或2倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
+<h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><p>&amp;emsp;&amp;emsp;建立对象就是为了使用对象，我们的 Java 程序通过栈上的 reference 数据来操作堆上的具体对象。对象的访问方式有虚拟机实现而定，目前主流的访问方式有两种。</p>
+<h3 id="1-使用句柄"><a href="#1-使用句柄" class="headerlink" title="1.使用句柄"></a>1.使用句柄</h3><p>​		如果使用句柄的话，那么 Java 堆中将会划分出一块内存来作为句柄池，reference 中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体地址信息</p>
+<p>​		使用句柄的好处：reference 中存储的是稳定的句柄地址，在对象被移动时（GC时很普遍会移动对象）只会改变句柄中的实例数据指针，而 reference 本身不需要修改</p>
+<p><img src="/project/jvm-2/2.png" alt="2.png"></p>
+<h3 id="2-使用直接指针"><a href="#2-使用直接指针" class="headerlink" title="2.使用直接指针"></a>2.使用直接指针</h3><p>​		如果使用直接指针访问，那么 Java 堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，而栈帧中的 reference 存储的直接就是对象的地址</p>
+<p>​		使用直接指针的好处：访问速度快，它节省了一次指针定位的时间开销。</p>
+<p>​		HotSpot虚拟机主要就是使用这种方式进行对象访问，但从整个软件开发的范围来看，在各种语言、框架中使用句柄访问的情况也十分常见。</p>
+<p> <img src="/project/jvm-2/3.png" alt="3.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/project/tags/Java/" rel="tag"># Java</a>
+              <a href="/project/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/project/2019/09/10/jvm-1/" rel="prev" title="一、Java内存区域">
+                  <i class="fa fa-chevron-left"></i> 一、Java内存区域
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/project/2019/09/15/jvm-3/" rel="next" title="三、Java垃圾收集器和内存分配策略">
+                  三、Java垃圾收集器和内存分配策略 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">量子猫</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/project/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

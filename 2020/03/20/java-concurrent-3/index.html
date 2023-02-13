@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/project/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+
+    <meta name="description" content="1、线程的概念​		进程是指一个内存中运行的应用程序，它是操作系统资源分配的最小单位。每个进程都有自己独立的一块内存空间，而一个进程中可以启动多个线程。 ​		线程是比进程更轻量级的调度执行单位，它是进程的一个执行单元。线程的引入可以把一个进程的资源分配和执行调度分开，各个线程之间既可以共享进程资源（内存地址、文件IO等），又可以独立调度。 2、线程的实现模型​	Java 使用的是 1：1 线程模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三、Java并发编程基础——线程">
+<meta property="og:url" content="https://mercuriussss.github.io/project/2020/03/20/java-concurrent-3/index.html">
+<meta property="og:site_name" content="量子猫">
+<meta property="og:description" content="1、线程的概念​		进程是指一个内存中运行的应用程序，它是操作系统资源分配的最小单位。每个进程都有自己独立的一块内存空间，而一个进程中可以启动多个线程。 ​		线程是比进程更轻量级的调度执行单位，它是进程的一个执行单元。线程的引入可以把一个进程的资源分配和执行调度分开，各个线程之间既可以共享进程资源（内存地址、文件IO等），又可以独立调度。 2、线程的实现模型​	Java 使用的是 1：1 线程模">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-3/clipboard-1613641813843.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-3/clipboard-1613641836218.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-3/clipboard-1613641867631.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-3/clipboard-1613641890655.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-3/clipboard-1613641912554.png">
+<meta property="article:published_time" content="2020-03-20T07:10:30.000Z">
+<meta property="article:modified_time" content="2023-02-13T09:41:19.544Z">
+<meta property="article:author" content="量子猫">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mercuriussss.github.io/project/java-concurrent-3/clipboard-1613641813843.png">
+
+
+<link rel="canonical" href="https://mercuriussss.github.io/project/2020/03/20/java-concurrent-3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2020/03/20/java-concurrent-3/","path":"2020/03/20/java-concurrent-3/","title":"三、Java并发编程基础——线程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>三、Java并发编程基础——线程 | 量子猫</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/project/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/project/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">量子猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们所度过的每一个日常,也许就是连续发生的奇迹</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">1、线程的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">2、线程的实现模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0%EF%BC%881%EF%BC%9A1%E5%AE%9E%E7%8E%B0%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">（1）内核线程实现（1：1实现）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0%EF%BC%881%EF%BC%9AN%E5%AE%9E%E7%8E%B0%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">（2）用户线程实现（1：N实现）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%8A%A0%E8%BD%BB%E9%87%8F%E7%BA%A7%E8%BF%9B%E7%A8%8B%E6%B7%B7%E5%90%88%E5%AE%9E%E7%8E%B0%EF%BC%88N%EF%BC%9AM%E5%AE%9E%E7%8E%B0%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">（3）用户线程加轻量级进程混合实现（N：M实现）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%B0%83%E5%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">3、线程的调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%8A%B6%E6%80%81"><span class="nav-number">4.</span> <span class="nav-text">4、线程的生命周期状态</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E9%80%9A%E7%94%A8%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">4.1.</span> <span class="nav-text">（1）通用的线程生命周期</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89Java-%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">4.2.</span> <span class="nav-text">（2）Java 的线程生命周期</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%E3%80%81Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">5、Java 多线程的实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E7%BB%A7%E6%89%BF-Thread-%E7%B1%BB"><span class="nav-number">5.1.</span> <span class="nav-text">（1）继承 Thread 类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E5%AE%9E%E7%8E%B0-Runnable-%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.2.</span> <span class="nav-text">（2）实现 Runnable 接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E5%AE%9E%E7%8E%B0-Callable-%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.3.</span> <span class="nav-text">（3）实现 Callable 接口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%E3%80%81%E5%90%AF%E5%8A%A8%E4%B8%8E%E7%BB%88%E6%AD%A2%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">6、启动与终止线程的方法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="量子猫"
+      src="/project/images/xz.jpg">
+  <p class="site-author-name" itemprop="name">量子猫</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/project/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2020/03/20/java-concurrent-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="name" content="量子猫">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子猫">
+      <meta itemprop="description" content="Stay Hungry, Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="三、Java并发编程基础——线程 | 量子猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          三、Java并发编程基础——线程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-20 15:10:30" itemprop="dateCreated datePublished" datetime="2020-03-20T15:10:30+08:00">2020-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 17:41:19" itemprop="dateModified" datetime="2023-02-13T17:41:19+08:00">2023-02-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h4 id="1、线程的概念"><a href="#1、线程的概念" class="headerlink" title="1、线程的概念"></a>1、线程的概念</h4><p>​		进程是指一个内存中运行的应用程序，它是操作系统资源分配的最小单位。每个进程都有自己独立的一块内存空间，而一个进程中可以启动多个线程。</p>
+<p>​		线程是比进程更轻量级的调度执行单位，它是进程的一个执行单元。线程的引入可以把一个进程的资源分配和执行调度分开，各个线程之间既可以共享进程资源（内存地址、文件IO等），又可以独立调度。</p>
+<h4 id="2、线程的实现模型"><a href="#2、线程的实现模型" class="headerlink" title="2、线程的实现模型"></a>2、线程的实现模型</h4><p>​	Java 使用的是 1：1 线程模型，Python 的gevent使用的是 1：N 线程模型，而 Go 使用的是 N：M 线程模型。</p>
+<h5 id="（1）内核线程实现（1：1实现）"><a href="#（1）内核线程实现（1：1实现）" class="headerlink" title="（1）内核线程实现（1：1实现）"></a>（1）内核线程实现（1：1实现）</h5><p>​		内核线程（Kernel-Level Thread，KLT）就是由操作系统内核（Kernel）支持的线程，这种线程由内核来完成线程切换操作。</p>
+<p>​		程序一般不会直接使用内核线程（那样太危险了），而是使用内核线程的一种高级接口——轻量级进程（Light Wegiht Process，LWP）来操作内核进程。轻量级进程即我们常说的线程，由于每个轻量级线程都由一个内核线程支持，也就是说 LWP 和KLT 之间是 1：1 的关系，因此也称这种模型为一对一的线程模型。</p>
+<p>​		这类似于一种代理模式，LWP 就是代理对象，而 KLT 则是被代理对象，我们把任务请求发给代理人 LWP，然后 LWP 会通过调用真实具备执行任务能力的被代理人 KLT 去执行任务。</p>
+<p><img src="/project/java-concurrent-3/clipboard-1613641813843.png" alt="img"></p>
+<div align="center" style="font-size:12px">图3-1 轻量级进程与内核线程之间1：1的关系图</div>
+
+<ul>
+<li><p><strong>优点</strong>：</p>
+</li>
+<li><ul>
+<li>每个 LWP 都是一个独立的调度单元，即便有一个 LWP 在系统调用中被阻塞了，也不会影响整个进程继续工作，系统的稳定性会比较好。</li>
+<li>线程的调度和各种操作都委托给了操作系统，所以实现上比较简单。</li>
+</ul>
+</li>
+<li><p><strong>缺点</strong>：</p>
+</li>
+<li><ul>
+<li>各种线程操作（创建、析构、同步等）都需要进行系统调用，而系统调用的代价较高，需要在<strong>用户态</strong>和<strong>内核态</strong>中来回切换，这需要消耗掉一定时间。</li>
+<li>每个 LWP 都需要一个 KLT 支持，即每个 LWP 都会消耗掉一部分内核资源（例如内核线程的栈空间），因此系统可以支持的 LWP 数量是有限的。</li>
+</ul>
+</li>
+</ul>
+<h5 id="（2）用户线程实现（1：N实现）"><a href="#（2）用户线程实现（1：N实现）" class="headerlink" title="（2）用户线程实现（1：N实现）"></a>（2）用户线程实现（1：N实现）</h5><p>​		广义上讲，一个线程只要不是 KLT ，都可以认为是用户线程（User Thread，UT）的一种。</p>
+<p>​		狭义上讲， UT 指的是完全建立在用户空间的线程，即操作系统感知不到线程的存在，只知道那个掌控着这些 UT 的进程 P 。因此，进程和 UT 之间的比例是 1：N 。</p>
+<p><img src="/project/java-concurrent-3/clipboard-1613641836218.png" alt="img"></p>
+<div align="center" style="font-size:12px">图3-2 进程与用户线程之间1：N的关系图</div>
+
+<ul>
+<li><p><strong>优点</strong>：</p>
+</li>
+<li><ul>
+<li>UT 的创建、同步、销毁、调度都是在用户态完成的，完全不需要切换到内核态，因此各种线程操作可以非常快速且低消耗。</li>
+<li>由于进程和 UT 之间的比例为 1：N，所以可以支持更大规模的 UT 数量，部分高性能数据库中的多线程就是由 UT 实现的。</li>
+</ul>
+</li>
+<li><p><strong>缺点</strong>：</p>
+</li>
+<li><ul>
+<li>由于没有系统内核的支持，所以所有的线程操作都需要程序自己实现，这就使得 UT 的实现程序通常都比较复杂，甚至有些是不可能实现的。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>现在使用 UT 的程序越来越少了，Java 和 Ruby 等语言都曾使用过 UT ，但最终又放弃了，而 Golang 、 Erlang 等以高并发为卖点的新语言则普遍支持了 UT 。</p>
+</blockquote>
+<h5 id="（3）用户线程加轻量级进程混合实现（N：M实现）"><a href="#（3）用户线程加轻量级进程混合实现（N：M实现）" class="headerlink" title="（3）用户线程加轻量级进程混合实现（N：M实现）"></a>（3）用户线程加轻量级进程混合实现（N：M实现）</h5><p>​		这种混合模式下，既存在 UT ，也存在 KLT ，被称之为 N：M 实现。</p>
+<p><img src="/project/java-concurrent-3/clipboard-1613641867631.png" alt="img"></p>
+<div align="center" style="font-size:12px">图3-3 用户线程与轻量级进程之间N：M的关系图</div>
+
+<p>该实现模型有以下特点：</p>
+<ul>
+<li>UT 还是完全建立在用户空间中，因此线程的创建、切换、析构等消耗依旧很小，同时也可以支持大规模的 UT 并发。</li>
+<li>对于线程的调度，则使用 LWP 作为 UT 和 KLT 之间的桥梁，这样可以使用操作系统提供的线程调度功能和处理器映射了。</li>
+<li>UT 的系统调用要通过 LWP 来完成，大大降低了整个进程被完全阻塞的风险。</li>
+<li>UT 和 LWP 之间的数量比是不定的，即两者数量是 N：M 的关系。</li>
+</ul>
+<blockquote>
+<p>许多UNIX系列的操作系统，如Solaris、HP-UX等都提供了M：N的线程模型实现</p>
+</blockquote>
+<h4 id="3、线程的调度"><a href="#3、线程的调度" class="headerlink" title="3、线程的调度"></a>3、线程的调度</h4><p>​		线程调度是指系统为线程分配处理器使用权的过程，调度主要方式有两种，分别是协同式（Cooperative Threads-Scheduling）线程调度和抢占式（Preemptive Threads-Scheduling）线程调度。</p>
+<ul>
+<li><p><strong>协同式线程调度</strong>： 线程的执行时间由线程本身来控制，线程执行完自己的任务之后，主动通知系统切换到另一个线程。</p>
+</li>
+<li><ul>
+<li>优点： 实现简单，切换操作对于线程自己可知，一般没有线程同步的问题。</li>
+<li>缺点： 线程执行时间不可控，如果一个线程编写有问题而一直不告知系统进行线程切换，程序会一直阻塞在那里。</li>
+</ul>
+</li>
+<li><p><strong>抢占式线程调度</strong>： 每个线程由系统分配执行时间，线程的切换不由程序本身来决定，而是由系统决定。</p>
+</li>
+<li><ul>
+<li>优点： 线程执行时间可控，不会因一个线程出错而耽误整个进程乃至系统。</li>
+</ul>
+</li>
+<li><ul>
+<li>缺点： 存在线程同步的问题，并且线程切换控制比较复杂。</li>
+</ul>
+</li>
+<li><ul>
+<li>Java 使用的线程调度方式就是这种。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4、线程的生命周期状态"><a href="#4、线程的生命周期状态" class="headerlink" title="4、线程的生命周期状态"></a>4、线程的生命周期状态</h4><h5 id="（1）通用的线程生命周期"><a href="#（1）通用的线程生命周期" class="headerlink" title="（1）通用的线程生命周期"></a>（1）通用的线程生命周期</h5><p>​		通用的线程生命周期模型主要将线程的状态分为以下五种：</p>
+<ul>
+<li><strong>初始：</strong>线程从创建到被cpu执行之前的这个阶段。这个状态下的线程仅仅是在编程语言层面被创建，而在操作系统层面并没有被创建，因此还不能被分配CPU资源，这相当于Java中new了个Thread对象但还没调用 start() 方法。</li>
+<li><strong>就绪：</strong>指线程可以分配cpu执行。在这种状态下，真正的操作系统线程已经被成功创建了，所以可以分配 CPU 执行。</li>
+<li><strong>运行：</strong>表示线程正获得cpu在运行。当有空闲的CPU资源时，操作系统会将资源分配给处于就绪状态的线程，这时线程的状态就将转为运行状态</li>
+<li><strong>阻塞：</strong>指线程在执行中因某件事而受阻，处于暂停执行的状态，并且放弃自己的CPU使用权。当它的阻塞状态结束了，它的状态会变为就绪状态，等待再次被分配 CPU 资源。</li>
+<li><strong>终止：</strong>当线程执行完或出现异常时，它就会进入终止状态，不会再切换到其他任何状态，这也意味着线程的生命周期结束了。</li>
+</ul>
+<p><img src="/project/java-concurrent-3/clipboard-1613641890655.png" alt="img"></p>
+<div align="center" style="font-size:12px">图3-4 通用的线程生命周期图</div>
+
+<h5 id="（2）Java-的线程生命周期"><a href="#（2）Java-的线程生命周期" class="headerlink" title="（2）Java 的线程生命周期"></a>（2）Java 的线程生命周期</h5><p>​		Java语言中线程共有六种状态：</p>
+<ul>
+<li><strong>新建（New）</strong>：创建后尚未启动的线程处于这种状态。</li>
+<li><strong>运行（Runnable）</strong>：包含操作系统线程状态中的就绪和运行状态，处于该状态的线程可能正在执行，也可能在等待着操作系统为它分配CPU资源。</li>
+<li><strong>等待（Waiting）</strong>：处于这种状态的线程不会被分配CPU资源，它们要等待被其他线程显式唤醒。</li>
+<li><strong>超时等待（Timed Waiting）</strong>：处于这种状态的线程不会被分配CPU资源，不过在一定时间之后，即使不被其他线程显示唤醒，也会由操作系统自动唤醒。</li>
+<li><strong>阻塞（Blocked）</strong>：线程被阻塞了，“阻塞状态”与“等待状态”的区别是“阻塞状态”在等待着获取到一个排它锁，这个事件将在另外一个线程放弃这个锁的时候发生；而“等待状态”则是在等待一段时间，或者唤醒动作的发生。</li>
+<li><strong>结束（Terminated）</strong>：已终止线程的线程状态，线程已经结束执行。</li>
+</ul>
+<p><img src="/project/java-concurrent-3/clipboard-1613641912554.png" alt="img"></p>
+<div align="center" style="font-size:12px">图3-5 Java线程的生命周期图</div>
+
+<h4 id="5、Java-多线程的实现方式"><a href="#5、Java-多线程的实现方式" class="headerlink" title="5、Java 多线程的实现方式"></a>5、Java 多线程的实现方式</h4><h5 id="（1）继承-Thread-类"><a href="#（1）继承-Thread-类" class="headerlink" title="（1）继承 Thread 类"></a>（1）继承 Thread 类</h5><p>​		Java 中提供了一个 java.lang.Thread 的程序类，底层是继承了Runnable接口的实现类。一个类只需要继承此类就表示此类为线程的主体，再覆写一个run()方法，就可以使用start()方法启动线程了。</p>
+<p>​		选择继承Thread类实现多线程的缺点是扩展性差，因为Java程序只允许单继承一个类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;<span class="comment">//线程主体类</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyThread</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;<span class="comment">//线程的主体方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;test: &quot;</span> + <span class="built_in">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​		任何情况下，只要定义了多线程，那么多线程的启动永远只有一种方法，即Thread类的start()方法。</p>
+<h5 id="（2）实现-Runnable-接口"><a href="#（2）实现-Runnable-接口" class="headerlink" title="（2）实现 Runnable 接口"></a>（2）实现 Runnable 接口</h5><p>​		一般情况下多线程多采用实现java.lang.Runnable接口的方式实现，因为这样做不会有单继承的局限性，扩展性更佳，不过启动时还是需要通过Thread类实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyThread</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;<span class="comment">//线程主体类</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyThread</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;<span class="comment">//线程的主体方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;test: &quot;</span> + <span class="built_in">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">MyThread</span>(<span class="string">&quot;线程A&quot;</span>));</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">MyThread</span>(<span class="string">&quot;线程B&quot;</span>));</span><br><span class="line">        threadA.start();</span><br><span class="line">        threadB.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="（3）实现-Callable-接口"><a href="#（3）实现-Callable-接口" class="headerlink" title="（3）实现 Callable 接口"></a>（3）实现 Callable 接口</h5><p>​		如果当线程执行完毕时，需要获取它的返回值，那么就可以采用Callable接口实现多线程（Runnable接口的线程无返回值）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Callable接口的源码</span><br><span class="line"></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Callable</span>&lt;V&gt; &#123;</span><br><span class="line"> <span class="keyword">public</span> V <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​		Callbale定义的时候可以设置一个泛型，此泛型的类型就是返回数据的类型，这样的的好处是可以避免向下转行所带来的安全隐患。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyThread</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;String&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">for</span> ( <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">0</span> ; x &lt; <span class="number">10</span> ; x ++ ) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;thread work，x = &quot;</span> + x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;finished&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">demo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">FutureTask</span> <span class="variable">futureTask</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FutureTask</span>(<span class="keyword">new</span> <span class="title class_">MyThread</span>());</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(futureTask).start();</span><br><span class="line">        System.out.println(<span class="string">&quot;thread return：&quot;</span> + futureTask.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Runnable 与 Callable的区别：</strong></p>
+<ul>
+<li><p>Runnable是在JDK1.0的时候提出的多线程的实现接口，而Callable是在JDK1.5之后提出的；</p>
+</li>
+<li><p>java.lang.Runnable 接口之中只提供了一个run（）方法，并且没有返回值；</p>
+</li>
+<li><p>java.util.concurrent.Callable接口提供有call()，可以有返回值；</p>
+</li>
+</ul>
+<h4 id="6、启动与终止线程的方法"><a href="#6、启动与终止线程的方法" class="headerlink" title="6、启动与终止线程的方法"></a>6、启动与终止线程的方法</h4><p>​		启动线程是调用线程类的start()方法即可，但终止线程不能使用stop()方法，因为它在终止线程时不会保证占用得线程资源会被正常释放。</p>
+<p>​		suspend()方法是暂停线程，线程进入休眠时也不会释放被占用的资源。</p>
+<p>​		比较安全地终止线程的方法是设置控制信号变量，或者使用 interrup() 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Shutdown</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Runner</span> <span class="variable">one</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runner</span>();</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">countThread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(one, <span class="string">&quot;CountThread&quot;</span>);</span><br><span class="line">        countThread.start();</span><br><span class="line">        <span class="comment">// 睡眠1秒，main线程对CountThread进行中断，使CountThread能够感知中断而结束</span></span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        countThread.interrupt();</span><br><span class="line">        <span class="type">Runner</span> <span class="variable">two</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Runner</span>();</span><br><span class="line">        countThread = <span class="keyword">new</span> <span class="title class_">Thread</span>(two, <span class="string">&quot;CountThread&quot;</span>);</span><br><span class="line">        countThread.start();</span><br><span class="line">        <span class="comment">// 睡眠1秒，main线程对Runner two进行取消，使CountThread能够感知on为false而结束</span></span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        two.cancel();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Runner</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">long</span> i;</span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">on</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (on &amp;&amp; !Thread.currentThread().isInterrupted())&#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;Count i = &quot;</span> + i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">cancel</span><span class="params">()</span> &#123;</span><br><span class="line">            on = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/project/tags/Java/" rel="tag"># Java</a>
+              <a href="/project/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/project/2020/03/20/java-concurrent-4/" rel="prev" title="四、Java并发编程——Java中的锁">
+                  <i class="fa fa-chevron-left"></i> 四、Java并发编程——Java中的锁
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/project/2020/03/20/java-collection-1/" rel="next" title="为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许">
+                  为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">量子猫</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/project/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/project/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+
+    <meta name="description" content="准备下载Next最新主题并将解压到themes目录下，旧版本的Next主题先保留着作个数据对照和参考，等到新版本完全配置完毕，再删了也不迟，下面我只简单说些我感受到的版本差异，还有一些美化优化设置 设置头像我用5.1版本时，头像的设置要在hexo的主配置 _config.yml 文件下添加以下代码 1avatar: 头像图片的url地址 新版本已经将头像设置的功能集合到Next主题的 _confi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Next主题从5.1版本升级到7.1的捣鼓">
+<meta property="og:url" content="https://mercuriussss.github.io/project/2019/04/30/hexo-next-1/index.html">
+<meta property="og:site_name" content="量子猫">
+<meta property="og:description" content="准备下载Next最新主题并将解压到themes目录下，旧版本的Next主题先保留着作个数据对照和参考，等到新版本完全配置完毕，再删了也不迟，下面我只简单说些我感受到的版本差异，还有一些美化优化设置 设置头像我用5.1版本时，头像的设置要在hexo的主配置 _config.yml 文件下添加以下代码 1avatar: 头像图片的url地址 新版本已经将头像设置的功能集合到Next主题的 _confi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/1.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/2.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/3.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/4.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/5.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/6.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/7.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/8.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/9.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/hexo-next-1/10.png">
+<meta property="article:published_time" content="2019-04-29T17:13:47.000Z">
+<meta property="article:modified_time" content="2023-02-13T09:41:19.513Z">
+<meta property="article:author" content="量子猫">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mercuriussss.github.io/project/hexo-next-1/1.png">
+
+
+<link rel="canonical" href="https://mercuriussss.github.io/project/2019/04/30/hexo-next-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2019/04/30/hexo-next-1/","path":"2019/04/30/hexo-next-1/","title":"Next主题从5.1版本升级到7.1的捣鼓"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Next主题从5.1版本升级到7.1的捣鼓 | 量子猫</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/project/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/project/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">量子猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们所度过的每一个日常,也许就是连续发生的奇迹</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%A4%B4%E5%83%8F"><span class="nav-number">2.</span> <span class="nav-text">设置头像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%BD%91%E7%AB%99logo"><span class="nav-number">3.</span> <span class="nav-text">设置网站logo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%98%85%E8%AF%BB%E5%85%A8%E6%96%87"><span class="nav-number">4.</span> <span class="nav-text">设置阅读全文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">设置搜索功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87%E4%BB%A5%E5%8F%8A%E7%95%8C%E9%9D%A2%E9%80%8F%E6%98%8E%E5%8C%96%E7%BE%8E%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">设置背景图片以及界面透明化美化</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="量子猫"
+      src="/project/images/xz.jpg">
+  <p class="site-author-name" itemprop="name">量子猫</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/project/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2019/04/30/hexo-next-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="name" content="量子猫">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子猫">
+      <meta itemprop="description" content="Stay Hungry, Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Next主题从5.1版本升级到7.1的捣鼓 | 量子猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Next主题从5.1版本升级到7.1的捣鼓
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-30 01:13:47" itemprop="dateCreated datePublished" datetime="2019-04-30T01:13:47+08:00">2019-04-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 17:41:19" itemprop="dateModified" datetime="2023-02-13T17:41:19+08:00">2023-02-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>下载<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next/releases">Next最新主题</a>并将解压到themes目录下，旧版本的Next主题先保留着作个数据对照和参考，等到新版本完全配置完毕，再删了也不迟，下面我只简单说些我感受到的版本差异，还有一些美化优化设置</p>
+<h3 id="设置头像"><a href="#设置头像" class="headerlink" title="设置头像"></a>设置头像</h3><p>我用5.1版本时，头像的设置要在hexo的主配置 <code>_config.yml</code> 文件下添加以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">avatar: 头像图片的url地址</span><br></pre></td></tr></table></figure>
+<p>新版本已经将头像设置的功能集合到Next主题的 <code>_config.yml</code> 配置文件中，我将头像图片放在hexo&#x2F;source&#x2F;imges中，配置如下图所示</p>
+<p><img src="/project/hexo-next-1/1.png" alt="79770a270ccdee6e35e15a4310a67e17.png"></p>
+<h3 id="设置网站logo"><a href="#设置网站logo" class="headerlink" title="设置网站logo"></a>设置网站logo</h3><p>该功能同样集合在Next主题的 <code>_config.yml</code> 配置文件中，将分割好的网站logo文件替换掉Next主题的images文件夹下的logo文件，总共有三个文件要替换，注意大小跟格式要匹配<br><img src="/project/hexo-next-1/2.png" alt="a344338330914b1e5820102cc90ce633.png"></p>
+<p>Next主题的 <code>_config.yml</code> 配置文件，搜关键词 <code>favicon</code> 即可找到对应网站logo设置<br><img src="/project/hexo-next-1/3.png" alt="b2b2e3dffd06b7ef587e0281648241a1.png"></p>
+<h3 id="设置阅读全文"><a href="#设置阅读全文" class="headerlink" title="设置阅读全文"></a>设置阅读全文</h3><p>在个人博客中，倘若文章显示全文，那在首页就长得没法看后面的文章了，所以我们要给他设置个预览效果<br>在Next主题的<code>_config.yml</code>配置文件中，搜索 <code>auto_excerpt</code> 并将其唤醒，enable的参数为是否唤醒，length的参数则为展示的高度<br><img src="/project/hexo-next-1/4.png" alt="6cfa11ec7d69f33e313a109889dfba8d.png"></p>
+<h3 id="设置搜索功能"><a href="#设置搜索功能" class="headerlink" title="设置搜索功能"></a>设置搜索功能</h3><ol>
+<li>安装插件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>设置hexo的主配置文件</p>
+<p>在文件中添加以下代码</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 本地搜索</span><br><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li><p>设置Next主题的配置文件</p>
+<p> 配置文件中有集成该搜索功能，搜索 <code>local_search</code> 并将其enble设置为true即可启动</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">local_search:</span><br><span class="line">  enable: true</span><br><span class="line">  trigger: auto</span><br><span class="line">  top_n_per_article: 1</span><br><span class="line">  unescape: false</span><br></pre></td></tr></table></figure>
+<h3 id="设置背景图片以及界面透明化美化"><a href="#设置背景图片以及界面透明化美化" class="headerlink" title="设置背景图片以及界面透明化美化"></a>设置背景图片以及界面透明化美化</h3><p>修改Next主题下的source&#x2F;css&#x2F;_custom中的 <code>custom.styl</code> 文件，注意此处的背景图片是放在hexo根目录下的source&#x2F;images&#x2F;</p>
+<p><img src="/project/hexo-next-1/5.png" alt="2ea71659e63e34af8ff9948ef6f76734.png"></p>
+<p>不过用上述这种方法将透明度修改过后，会造成一个BUG——搜索框不再置顶，而是被其他模块挡住了</p>
+<p><img src="/project/hexo-next-1/6.png" alt="14b9a761e03b759fa969c4f6dcb99cd8.png"></p>
+<p>这个我折腾了半天，想出了个简单粗暴的方法，直接在设置透明度时给它来个z-index:9999的属性，虽说这样能解决问题，但解决BUG的代码是引出另外的、不怎么明显的BUG</p>
+<p><img src="/project/hexo-next-1/7.png" alt="eedad09f12015c27d3d505f359be3ac2.png"></p>
+<p><img src="/project/hexo-next-1/8.png" alt="352e54834089b15f90c35ab9e5658c3a.png"></p>
+<p>从上图可以看出，菜单栏与搜索框一同置顶了，所以高亮的颜色跟周围有所不同，并且搜索框也被透明化了，让人观看时的体验不是很舒服</p>
+<p>不过在这时，我不久前求助的群里，有个群友说他曾经也遇到过这个透明化问题，但他的解决方法是将菜单栏单独设置成白色透明的背景色，这样就能避免跟搜索框产生冲突，我去试了一下，这个方法能完美解决上述问题，同时不会让搜索框透明化</p>
+<p><img src="/project/hexo-next-1/9.png" alt="a679f699ff4c894b5cbdc6dcf92b026f.png"></p>
+<p><img src="/project/hexo-next-1/10.png" alt="875078b396b0e1440134352e7be4134b.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/project/tags/hexo/" rel="tag"># hexo</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/project/2019/04/02/aliCloud_1/" rel="prev" title="阿里云Centos7.4服务器配置jdk、tomcat、mysql教程">
+                  <i class="fa fa-chevron-left"></i> 阿里云Centos7.4服务器配置jdk、tomcat、mysql教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/project/2019/05/12/SpringBoot-1/" rel="next" title="SpringBoot项目中关于maven依赖冲突的BUG处理(搞了一天的BUG)">
+                  SpringBoot项目中关于maven依赖冲突的BUG处理(搞了一天的BUG) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">量子猫</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/project/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

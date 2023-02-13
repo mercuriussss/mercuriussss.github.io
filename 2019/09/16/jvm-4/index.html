@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/project/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+
+    <meta name="description" content="1、魔数（Magic Number）​		前4个字节被称之为魔数，用于确定该文件是否为一个能被虚拟机接受的class文件 ​		class文件的魔数为0xCAFEBABE（咖啡宝贝） 2、文件版本（Version）​		第5、6个字节为次版本号，第7、8个字节为主版本号  ​		下图为class文件版本号  3、常量池（Constant Pool）​		常量池入口，常量池主要存放字面量和符号引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="四、class文件的文件头">
+<meta property="og:url" content="https://mercuriussss.github.io/project/2019/09/16/jvm-4/index.html">
+<meta property="og:site_name" content="量子猫">
+<meta property="og:description" content="1、魔数（Magic Number）​		前4个字节被称之为魔数，用于确定该文件是否为一个能被虚拟机接受的class文件 ​		class文件的魔数为0xCAFEBABE（咖啡宝贝） 2、文件版本（Version）​		第5、6个字节为次版本号，第7、8个字节为主版本号  ​		下图为class文件版本号  3、常量池（Constant Pool）​		常量池入口，常量池主要存放字面量和符号引用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-4/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/jvm-4/clipboard-1613627011116.png">
+<meta property="article:published_time" content="2019-09-16T12:22:17.000Z">
+<meta property="article:modified_time" content="2023-02-13T09:41:19.576Z">
+<meta property="article:author" content="量子猫">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mercuriussss.github.io/project/jvm-4/clipboard.png">
+
+
+<link rel="canonical" href="https://mercuriussss.github.io/project/2019/09/16/jvm-4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2019/09/16/jvm-4/","path":"2019/09/16/jvm-4/","title":"四、class文件的文件头"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>四、class文件的文件头 | 量子猫</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/project/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/project/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">量子猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们所度过的每一个日常,也许就是连续发生的奇迹</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E9%AD%94%E6%95%B0%EF%BC%88Magic-Number%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">1、魔数（Magic Number）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E6%96%87%E4%BB%B6%E7%89%88%E6%9C%AC%EF%BC%88Version%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">2、文件版本（Version）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Constant-Pool%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">3、常量池（Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%EF%BC%88Access-Flags%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">4、访问标志（Access Flags）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%E3%80%81%E7%B4%A2%E5%BC%95%EF%BC%88Index%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">5、索引（Index）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%E3%80%81%E5%AD%97%E6%AE%B5%E8%A1%A8%E9%9B%86%E5%90%88%EF%BC%88Field-Info%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">6、字段表集合（Field Info）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7%E3%80%81%E6%96%B9%E6%B3%95%E8%A1%A8%E9%9B%86%E5%90%88"><span class="nav-number">7.</span> <span class="nav-text">7、方法表集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8%E3%80%81%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88"><span class="nav-number">8.</span> <span class="nav-text">8、属性表集合</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="量子猫"
+      src="/project/images/xz.jpg">
+  <p class="site-author-name" itemprop="name">量子猫</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/project/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2019/09/16/jvm-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="name" content="量子猫">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子猫">
+      <meta itemprop="description" content="Stay Hungry, Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="四、class文件的文件头 | 量子猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          四、class文件的文件头
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-16 20:22:17" itemprop="dateCreated datePublished" datetime="2019-09-16T20:22:17+08:00">2019-09-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 17:41:19" itemprop="dateModified" datetime="2023-02-13T17:41:19+08:00">2023-02-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h4 id="1、魔数（Magic-Number）"><a href="#1、魔数（Magic-Number）" class="headerlink" title="1、魔数（Magic Number）"></a>1、魔数（Magic Number）</h4><p>​		前4个字节被称之为魔数，用于确定该文件是否为一个能被虚拟机接受的class文件</p>
+<p>​		class文件的魔数为0xCAFEBABE（咖啡宝贝）</p>
+<h4 id="2、文件版本（Version）"><a href="#2、文件版本（Version）" class="headerlink" title="2、文件版本（Version）"></a>2、文件版本（Version）</h4><p>​		第5、6个字节为次版本号，第7、8个字节为主版本号</p>
+<p><img src="/project/jvm-4/clipboard.png" alt="img"></p>
+<p>​		下图为class文件版本号</p>
+<p><img src="/project/jvm-4/clipboard-1613627011116.png" alt="img"></p>
+<h4 id="3、常量池（Constant-Pool）"><a href="#3、常量池（Constant-Pool）" class="headerlink" title="3、常量池（Constant Pool）"></a>3、常量池（Constant Pool）</h4><p>​		常量池入口，常量池主要存放字面量和符号引用</p>
+<p>​		字面量：比较接近于Java语言层面中的常量概念，如文本字符串、申明为final的常量值等</p>
+<p>​		符号引用：比较接近于编译原理方面的概念，主要包括类和接口的全限定名、字段的名称与描述符、方法的名称和描述符</p>
+<p>​		常量池分析：<a target="_blank" rel="noopener" href="https://blog.csdn.net/gcw1024/article/details/51026840">https://blog.csdn.net/gcw1024/article/details/51026840</a></p>
+<h4 id="4、访问标志（Access-Flags）"><a href="#4、访问标志（Access-Flags）" class="headerlink" title="4、访问标志（Access Flags）"></a>4、访问标志（Access Flags）</h4><p>​		紧接着的两个字节表示访问标志，例如该class文件是类还是接口、是否是public、是否是abstract等等</p>
+<h4 id="5、索引（Index）"><a href="#5、索引（Index）" class="headerlink" title="5、索引（Index）"></a>5、索引（Index）</h4><p>​		类索引、父类索引、接口索引集合，三个都是u2（2个字节的无符号数）类型，这三项数据共同确定一个类的继承关系</p>
+<h4 id="6、字段表集合（Field-Info）"><a href="#6、字段表集合（Field-Info）" class="headerlink" title="6、字段表集合（Field Info）"></a>6、字段表集合（Field Info）</h4><p>​		字段表，用于描述接口或者类中声明的变量，例如作用域（public、private……）、是实例变量还是类变量（static）、可变性（final）、并发可见性（volatile）、字段数据类型（基本类型、对象、数组）。</p>
+<p>​		字段包括类级变量以及实例级变量，但不包括方法内部声明的局部变量</p>
+<h4 id="7、方法表集合"><a href="#7、方法表集合" class="headerlink" title="7、方法表集合"></a>7、方法表集合</h4><p>​		Class文件存储格式中对方法的描述和字段表几乎一致</p>
+<p>​		在Java语言中，要重载一个方法，除了要跟原方法具有相同的简单名称外，还必须要有一个与原方法不同的特征签名，特征签名就是一个方法中各个参数在常量池中的字段符号的集合，也就是因为返回值不会包含在特征签名中，因此Java语言里面是无法仅仅依靠返回值的不同来进行方法重载。</p>
+<p>​		但在Class文件中，特征签名的范围要更大些，只要描述符不是完全一致就可以共存，就是说如果两个方法有相同的名称和特征签名，但返回值不同，那么它们还是可以合法共存于同一Class文件当中</p>
+<h4 id="8、属性表集合"><a href="#8、属性表集合" class="headerlink" title="8、属性表集合"></a>8、属性表集合</h4><p>​		在Class文件、字段表、方发表都可以携带自己的属性表集合</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/project/tags/Java/" rel="tag"># Java</a>
+              <a href="/project/tags/JVM/" rel="tag"># JVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/project/2019/09/15/jvm-3/" rel="prev" title="三、Java垃圾收集器和内存分配策略">
+                  <i class="fa fa-chevron-left"></i> 三、Java垃圾收集器和内存分配策略
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/project/2019/09/17/jvm-5/" rel="next" title="五、Java类加载机制">
+                  五、Java类加载机制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">量子猫</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/project/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

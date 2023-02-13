@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/project/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+
+    <meta name="description" content="1、硬件的利用效率与一致性​		由于计算机的存储设备与处理器的运算速度相差好几个数量级，CPU经常需要等待主存，白白浪费资源，所以现代计算机加入一层或多层读写速度尽可能接近处理器运算速度的高速缓存（Cache）来作为内存与处理器之间的缓冲 ( 结构 : cpu -&gt; cache -&gt; memory ) 。 ​		这种CPU多级缓存的方式很好地解决了CPU与内存速度之间的矛盾，但也引入了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二、Java并发编程基础——Java内存模型（JMM）">
+<meta property="og:url" content="https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/index.html">
+<meta property="og:site_name" content="量子猫">
+<meta property="og:description" content="1、硬件的利用效率与一致性​		由于计算机的存储设备与处理器的运算速度相差好几个数量级，CPU经常需要等待主存，白白浪费资源，所以现代计算机加入一层或多层读写速度尽可能接近处理器运算速度的高速缓存（Cache）来作为内存与处理器之间的缓冲 ( 结构 : cpu -&gt; cache -&gt; memory ) 。 ​		这种CPU多级缓存的方式很好地解决了CPU与内存速度之间的矛盾，但也引入了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard-1613641790425.png">
+<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard-1614355781698.png">
+<meta property="article:published_time" content="2020-03-17T07:22:34.000Z">
+<meta property="article:modified_time" content="2023-02-13T09:41:19.540Z">
+<meta property="article:author" content="量子猫">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard.png">
+
+
+<link rel="canonical" href="https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/","path":"2020/03/17/java-concurrent-2/","title":"二、Java并发编程基础——Java内存模型（JMM）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>二、Java并发编程基础——Java内存模型（JMM） | 量子猫</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/project/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/project/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">量子猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们所度过的每一个日常,也许就是连续发生的奇迹</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E7%A1%AC%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8%E6%95%88%E7%8E%87%E4%B8%8E%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">1、硬件的利用效率与一致性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E4%B8%BB%E5%86%85%E5%AD%98%E4%B8%8E%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AD%98"><span class="nav-number">2.</span> <span class="nav-text">2、主内存与工作内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%85%AB%E7%A7%8D%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E4%B8%8E%E6%89%A7%E8%A1%8C%E8%A7%84%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">3、八种原子操作与执行规则</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%85%AB%E7%A7%8D%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="nav-number">3.1.</span> <span class="nav-text">（1）八种原子操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E6%89%A7%E8%A1%8C%E8%A7%84%E5%88%99"><span class="nav-number">3.2.</span> <span class="nav-text">（2）执行规则</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81as-if-serial-%E8%AF%AD%E4%B9%89"><span class="nav-number">4.</span> <span class="nav-text">4、as-if-serial 语义</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%AE%9A%E4%B9%89"><span class="nav-number">4.1.</span> <span class="nav-text">（1）定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89as-if-serial-%E5%92%8C-Happens-Before"><span class="nav-number">4.2.</span> <span class="nav-text">（2）as-if-serial 和 Happens-Before</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%E3%80%81Happens-Before-%E8%A7%84%E5%88%99"><span class="nav-number">5.</span> <span class="nav-text">5、Happens-Before 规则</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E7%94%B1%E6%9D%A5"><span class="nav-number">5.1.</span> <span class="nav-text">（1）由来</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E5%AE%9A%E4%B9%89"><span class="nav-number">5.2.</span> <span class="nav-text">（2）定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E5%85%B7%E4%BD%93%E5%86%85%E5%AE%B9"><span class="nav-number">5.3.</span> <span class="nav-text">（3）具体内容</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%E3%80%81volatile-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">6、volatile 的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E7%AE%80%E4%BB%8B"><span class="nav-number">6.1.</span> <span class="nav-text">（1）简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89-volatile-%E5%8F%98%E9%87%8F%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%89%B9%E7%82%B9"><span class="nav-number">6.2.</span> <span class="nav-text">（2） volatile 变量的两个特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89-%E5%AE%9E%E7%8E%B0Happens-Before%E8%A7%84%E5%88%99%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-number">6.3.</span> <span class="nav-text">（3） 实现Happens-Before规则的要求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%884%EF%BC%89volatile-%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.4.</span> <span class="nav-text">（4）volatile 的具体实现</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7%E3%80%81final"><span class="nav-number">7.</span> <span class="nav-text">7、final</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%86%99final%E5%9F%9F%E7%9A%84%E9%87%8D%E6%8E%92%E5%BA%8F%E8%A7%84%E5%88%99"><span class="nav-number">7.1.</span> <span class="nav-text">（1）写final域的重排序规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E8%AF%BBfinal%E5%9F%9F%E7%9A%84%E9%87%8D%E6%8E%92%E5%BA%8F%E8%A7%84%E5%88%99"><span class="nav-number">7.2.</span> <span class="nav-text">（2）读final域的重排序规则</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="量子猫"
+      src="/project/images/xz.jpg">
+  <p class="site-author-name" itemprop="name">量子猫</p>
+  <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/project/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="name" content="量子猫">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子猫">
+      <meta itemprop="description" content="Stay Hungry, Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="二、Java并发编程基础——Java内存模型（JMM） | 量子猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          二、Java并发编程基础——Java内存模型（JMM）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-17 15:22:34" itemprop="dateCreated datePublished" datetime="2020-03-17T15:22:34+08:00">2020-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 17:41:19" itemprop="dateModified" datetime="2023-02-13T17:41:19+08:00">2023-02-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h4 id="1、硬件的利用效率与一致性"><a href="#1、硬件的利用效率与一致性" class="headerlink" title="1、硬件的利用效率与一致性"></a>1、硬件的利用效率与一致性</h4><p>​		由于计算机的存储设备与处理器的运算速度相差好几个数量级，CPU经常需要等待主存，白白浪费资源，所以现代计算机加入一层或多层读写速度尽可能接近处理器运算速度的<strong>高速缓存（Cache）</strong>来作为内存与处理器之间的缓冲 ( 结构 : cpu -&gt; cache -&gt; memory ) 。</p>
+<p>​		这种CPU多级缓存的方式很好地解决了CPU与内存速度之间的矛盾，但也引入了一个新的问题：<strong>缓存一致性（Cache Coherence）</strong>。为了解决一致性问题，各个处理器在访问缓存以及读写时都需要遵循一些协议，这类协议有MSI、<strong>MESI</strong>（Illinois Protocol）、MOSI、Synapse、Firefly及Dragon Protocol等。</p>
+<p>​		除了增加高速缓存外，为了提高硬件的利用率，处理器还可能会对输入代码进行<strong>乱序执行（Out-Of-Order Execution）</strong>优化，即保证最终结果与顺序执行的一致，但不保证程序中每个语句计算的先后顺序，类似于 <code>JVM</code> 中的指令重排序优化。</p>
+<h4 id="2、主内存与工作内存"><a href="#2、主内存与工作内存" class="headerlink" title="2、主内存与工作内存"></a>2、主内存与工作内存</h4><ul>
+<li><p>从变量、主内存、工作内存的定义来看：</p>
+<ul>
+<li><p>主内存主要对应于Java堆中的对象实例数据部分</p>
+</li>
+<li><p>工作内存则对应虚拟机栈中的部分区域</p>
+</li>
+</ul>
+</li>
+<li><p>从更基础的层次上说：</p>
+<ul>
+<li>主内存直接对应于物理硬件的内存</li>
+<li>为了获取更好的运行速度，虚拟机（或是硬件、操作系统本身的优化措施）可能会让工作内存优先存储于寄存器和高速缓存中，因为程序运行时主要访问的是工作内存。</li>
+</ul>
+</li>
+</ul>
+<p>​		JMM 规定了所有的变量都存储在主内存中，每个线程都有自己的工作内存，线程的工作内存中保存的是当前线程使用到的变量值的副本（从主内存拷贝过来的）。</p>
+<p>​		线程对变量的所有操作都必须在工作内存中进行，不能直接读写主内存中的数据，线程之间的相互传值也需要通过主内存来完成。</p>
+<p><img src="/project/java-concurrent-2/clipboard.png" alt="img"></p>
+<div align="center" style="font-size:12px">图2-1 线程、主内存、工作内存三者的交互关系</div>
+
+<h4 id="3、八种原子操作与执行规则"><a href="#3、八种原子操作与执行规则" class="headerlink" title="3、八种原子操作与执行规则"></a>3、八种原子操作与执行规则</h4><h5 id="（1）八种原子操作"><a href="#（1）八种原子操作" class="headerlink" title="（1）八种原子操作"></a>（1）八种原子操作</h5><p>Java内存模型定义了以下 8 种操作来完成主内存与工作内存交互的工作：</p>
+<ul>
+<li><p>**lock (锁定)**：作用于主内存的变量。把一个变量标识为一条线程独占的状态。</p>
+</li>
+<li><p>**unlock (解锁)**：作用于主内存的变量.把一个处于锁定状态的变量释放出来。</p>
+</li>
+<li><p>**read (读取)**：作用于主内存的变量。把一个变量值从主内存传输到线程的工作内存中，以便随后的load动作使用。</p>
+</li>
+<li><p>**load (载入)**：作用于工作内存的变量，它把read操作从主内存中得到的值放入工作内存的变量副本中。</p>
+</li>
+<li><p>**use (使用)**：作用与工作内存的变量.它把工作内存中一个变量值传递给执行引擎，每当虚拟机遇到一个需要使用到变量的值的字节码指令时就会执行这个操作。</p>
+</li>
+<li><p>**assign (赋值)**：作用于工作内存的变量，它把一个从执行引擎收到的赋值给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</p>
+</li>
+<li><p>**store (存储)**：作用于工作内存的变量，它把工作内存中的一个变量的值传送到主内存中，以便随后的 wirte 操作使用。</p>
+</li>
+<li><p>**wirte (写入)**：作用于主内存的变量，它把 store 操作从工作内存中得到的变量值放入主内存中。<img src="/project/java-concurrent-2/clipboard-1613641790425.png" alt="img"></p>
+<div align="center" style="font-size:12px">图2-2 同步操作与规则图</div>
+
+<h5 id="（2）执行规则"><a href="#（2）执行规则" class="headerlink" title="（2）执行规则"></a>（2）执行规则</h5><p>这 8 种原子操作的执行规则大致可以划分为两类，一类是有关变量拷贝过程的规则，另一类是有关加锁的规则。</p>
+<p><strong>有关变量拷贝过程的规则</strong>：</p>
+<ul>
+<li>不允许 read 和 load，store 和 write 单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者工作内存发起回写了但主内存不接受的情况出现。</li>
+<li>不允许线程丢弃它最近的 assign 操作，即变量在工作内存中改变后必须把该变化同步回主内存中。</li>
+<li>不允许线程无原因地（没有发生过任何 assign 操作）将数据从工作内存同步回主内存中，也就是说，只有虚拟机遇到变量赋值的字节码时才会将工作内存同步回主内存。</li>
+<li>新的变量只能从主内存中诞生，即不能在工作内存中使用未被初始化（load 或 assign）的变量，一个变量在 use 和 store 前必须先经过 load 和 assign 操作。</li>
+</ul>
+<p><strong>有关加锁的规则</strong>：</p>
+<ul>
+<li><p>一个变量在同一时刻只允许一个线程对其进行 lock 操作，但是 lock 操作可以被同一个线程多次执行（锁的可重入），多次执行后只有执行相同次数的 unlock 操作，变量才会被解锁。</p>
+</li>
+<li><p>对一个变量进行 lock 操作会清空这个变量在工作内存中的值，然后在执行引擎使用这个变量时，需要通过 assign 或 load 重新对这个变量进行初始化。</p>
+</li>
+<li><p>对一个变量执行 unlock 前，必须将该变量同步回主内存中，即执行 store 和 write 操作。</p>
+</li>
+<li><p>一个变量没有被 lock，就不能被 unlock，也不能去 unlock一个被其他线程 lock 的变量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4、as-if-serial-语义"><a href="#4、as-if-serial-语义" class="headerlink" title="4、as-if-serial 语义"></a>4、as-if-serial 语义</h4><h5 id="（1）定义"><a href="#（1）定义" class="headerlink" title="（1）定义"></a>（1）定义</h5><p>  ​		as-if-serial语义的意思是不管怎么重排序（编译器和处理器为了提高并行度），（单线程）程序的执行结果不能改变。</p>
+<p>  ​		编译器、runtime和处理器都必须遵守as-if-serial语义。</p>
+<p>  ​		为了遵守as-if-serial语义，编译器和处理器不会对存在数据依赖关系的操作进行重排序，因为这种重排序会改变执行结果，但反过来说，如果不存在依赖关系则可以进行重排序。</p>
+<h5 id="（2）as-if-serial-和-Happens-Before"><a href="#（2）as-if-serial-和-Happens-Before" class="headerlink" title="（2）as-if-serial 和 Happens-Before"></a>（2）as-if-serial 和 Happens-Before</h5><ul>
+<li>as-if-serial语义保证单线程内程序的执行结果不被改变，happens-before关系保证正确同步的多线程程序的执行结果不被改变。</li>
+<li>as-if-serial语义给编写单线程程序的程序员创造了一个幻境：单线程程序是按程序的顺序来执行的。</li>
+<li>happens-before关系给编写正确同步的多线程程序的程序员创造了一个幻境：正确同步的多线程程序是按happens-before指定的顺序来执行的。</li>
+</ul>
+<blockquote>
+<p>as-if-serial语义和happens-before这么做的目的，都是为了在不改变程序执行结果的前提下，尽可能地提高程序执行的并行度</p>
+</blockquote>
+<h4 id="5、Happens-Before-规则"><a href="#5、Happens-Before-规则" class="headerlink" title="5、Happens-Before 规则"></a>5、Happens-Before 规则</h4><h5 id="（1）由来"><a href="#（1）由来" class="headerlink" title="（1）由来"></a>（1）由来</h5><p>  ​		为了提高性能，编译器和处理器常常会对指令做重排序，主要包括编译器优化的重排序、指令级并行的重排序、内存系统的重排序三部分，而源代码从开始到最终执行会依次经过这三个重排序的优化。</p>
+<p>  ​		为了避免编译优化对并发编程安全性的影响，从 JDK 5 开始 JMM 就使用 Happens-Before 规则来保证并发编程的安全性，要求编译器优化后需要满足 Happens-Before 规则。</p>
+<h5 id="（2）定义"><a href="#（2）定义" class="headerlink" title="（2）定义"></a>（2）定义</h5><p>  ​		Happens-Before，即“先行发生”规则，指的是对于不同的线程，前面的操作也应该发生在后面操作的前面，也就是说，Happens-Before 规则保证：前面的操作的结果对后面的操作一定是可见的。</p>
+<p>  ​		它上是一种顺序约束规范，用来约束编译器的优化行为，即为了执行效率，我们允许编译器的优化行为，但是为了保证程序运行的正确性，我们要求编译器优化后需要满足 Happens-Before 规则。</p>
+<h5 id="（3）具体内容"><a href="#（3）具体内容" class="headerlink" title="（3）具体内容"></a>（3）具体内容</h5><p>  ​		根据类别，我们将 Happens-Before 规则分为了以下 4 类：</p>
+<ul>
+<li><p>操作的顺序：</p>
+<ul>
+<li><strong>程序顺序规则</strong>： 如果代码中操作 A 在操作 B 之前，那么同一个线程中 A 操作一定在 B 操作前执行，即在本线程内观察，所有操作都是有序的。</li>
+<li><strong>传递性</strong>： 在同一个线程中，如果 A 先于 B ，B 先于 C 那么 A 必然先于 C。</li>
+</ul>
+</li>
+<li><p>锁和 volatile：</p>
+<ul>
+<li><strong>监视器锁规则</strong>： 监视器锁的解锁操作必须在同一个监视器锁的加锁操作前执行。</li>
+<li><strong>volatile 变量规则</strong>： 对 volatile 变量的写操作必须在对该变量的读操作前执行，保证时刻读取到这个变量的最新值。</li>
+</ul>
+</li>
+<li><p>线程和中断：</p>
+<ul>
+<li><strong>线程启动规则</strong>： Thread#start() 方法一定先于该线程中执行的操作。</li>
+<li><strong>线程结束规则</strong>： 线程的所有操作先于线程的终结。</li>
+<li><strong>中断规则</strong>： 假设有线程 A，其他线程 interrupt A 的操作先于检测 A 线程是否中断的操作，即对一个线程的 interrupt() 操作和 interrupted() 等检测中断的操作同时发生，那么 interrupt() 先执行。</li>
+</ul>
+</li>
+<li><p>对象生命周期相关：</p>
+<ul>
+<li><strong>终结器规则</strong>： 对象的构造函数执行先于 finalize() 方法。</li>
+</ul>
+</li>
+</ul>
+<h4 id="6、volatile-的实现原理"><a href="#6、volatile-的实现原理" class="headerlink" title="6、volatile 的实现原理"></a>6、volatile 的实现原理</h4><h5 id="（1）简介"><a href="#（1）简介" class="headerlink" title="（1）简介"></a><strong>（1）简介</strong></h5><p>  ​		volatile 是 JVM 提供的最轻量级的同步机制，它可以保证数据的 <strong>可见性</strong>，避免出现数据脏读的现象。</p>
+<p>  ​		volatile 变量是从工作内存中读取的，只是它有特殊的操作顺序规定，使得看起来像是直接在主内存中读写。</p>
+<p>  ​		每个线程操作数据的时候会把数据从主内存读取到自己的工作内存，如果他操作了数据并且写回了，那其他已经读取的线程的变量副本就会失效了（volatile底层有标记当前值是否失效的状态），需要对数据进行操作又要再次去主内存中读取了。</p>
+<h5 id="（2）-volatile-变量的两个特点"><a href="#（2）-volatile-变量的两个特点" class="headerlink" title="（2） volatile 变量的两个特点"></a>（2） volatile 变量的两个特点</h5><p>  ​		①<strong>保证对所有线程的可见性</strong></p>
+<p>  ​		这里的“可见性”指的是当一个线程修改了这个变量的值，新增对于其他线程来说是可以立即得知的。普通变量的值在线程间传递时需要通过主内存来完成，比如线程 A 修改一个普通变量的值，然后向主内存进行回写，而线程 B 在线程 A 回写完成了之后再对主内存进行读取操作，这时新变量值才会对线程 B 可见。</p>
+<p>  ​		可见性的保证是基于CPU的内存屏障指令，被JSR-133抽象为happens-before原则。</p>
+<p>  ​		②<strong>禁止指令重排序优化</strong></p>
+<p>  ​		普通变量仅会保证在该方法的执行过程中，所有依赖赋值结果的地方都能获取到正确的结果，而不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。</p>
+<p>  ​		编译时JVM编译器遵循内存屏障的约束，运行时依靠CPU屏障指令来阻止重排。</p>
+<p>  <img src="/project/java-concurrent-2/clipboard-1614355781698.png" alt="img"></p>
+  <div align="center" style="font-size:12px">图2-3 volatile读写的指令图</div>
+
+<h5 id="（3）-实现Happens-Before规则的要求"><a href="#（3）-实现Happens-Before规则的要求" class="headerlink" title="（3） 实现Happens-Before规则的要求"></a>（3） 实现Happens-Before规则的要求</h5><p>  ​		Happens-Before 原则的规定保证了操作间的可见性，volatile 变量保证了有序性和可见性，volatile 的特性得以于Java语言中的 Happens-Before 规则。		</p>
+<p>  ​		Happens-Before 规则中要求，对 volatile 变量的写操作必须在对该变量的读操作前执行，具体实现方法分两步：</p>
+<p>  <strong>① 保证动作发生</strong></p>
+<p>  ​		首先，在对 volatile 变量进行读取和写入操作，必须去主内存拉取最新值，或是将最新值更新进主内存，不能只更新进工作内存而不将操作同步进主内存，即在执行 read、load、use、assign、store、write 操作时：</p>
+<ul>
+<li><p>use 操作必须与 load、read 操作同时出现，不能只 use，不 load、read。</p>
+<ul>
+<li>use ← load ← read</li>
+</ul>
+</li>
+<li><p>assign 操作必须与 store、write 操作同时出现，不能只 assign，不 store、write。</p>
+<ul>
+<li>assign → store → write</li>
+</ul>
+</li>
+</ul>
+<p>  ​		此时，我们已经保证了将变量的最新值时刻同步进主内存的动作发生了，接下来，我们需要保证这个动作，对于不同的线程，满足 volatile 变量的 Happens-Before 规则：<strong>对变量的写操作必须在对该变量的读操作前执行</strong>。</p>
+<p>  <strong>② 保证动作按正确的顺序发生</strong></p>
+<p>  ​		其实，导致这个执行顺序问题的主要原因在于，这个读写 volatile 变量的操作不是一气呵成的，它并不是原子的。无论是读还是写，它都分成了 3 个命令（use ← load ← read 或 assign → store → write），这就导致了，你能保证 assignA 发生在 useB 之前，但你根本不能保证 writeA 也发生在 useB 之前，而如果 writeA 不发生在 useB 之前，主内存中的数据就是旧的，线程 B 就读不到最新值。</p>
+<p>  ​		好比一个写操作，发生在它之前的读操作可以随便执行，但是发生在它之后的读操作，必须等把 3 个命令都执行完才能执行，即 **“对变量的写操作必须在对该变量的读操作前执行” **。</p>
+<h5 id="（4）volatile-的具体实现"><a href="#（4）volatile-的具体实现" class="headerlink" title="（4）volatile 的具体实现"></a>（4）volatile 的具体实现</h5><p>  ​		Java 巧妙的利用了 lock 操作的特点，通过观察对 volatile 变量的赋值操作的反编译代码可以看出，在执行了变量赋值操作之后，额外加了一行：</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock addl $<span class="number">0x0</span>,(%esp)</span><br></pre></td></tr></table></figure>
+
+<p>  这一句的意思是：给 ESP 寄存器 +0，这是一个无意义的空操作，重点在 lock 上：</p>
+<ul>
+<li><p><strong>保证动作发生</strong>：</p>
+<ul>
+<li>lock 指令会将当前 CPU 的 Cache 写入内存，并无效化其他 CPU 的 Cache，相当于在执行了 assign 后，又进行了 store -&gt; write；</li>
+<li>这使得其他 CPU 可以立即看见 volatile 变量的修改，因为其他 CPU 在读取 volatile 变量时，会发现自己的缓存过期了，于是会去主内存中拉取最新的 volatile 变量值，也就被迫在 use 前进行一次 read -&gt; load。</li>
+</ul>
+</li>
+<li><p><strong>保证动作顺序</strong>：</p>
+<ul>
+<li>lock 的存在相当于一个内存屏障，使得在重排序时，不能把后面的指令排在内存屏障之前。</li>
+</ul>
+</li>
+</ul>
+<h4 id="7、final"><a href="#7、final" class="headerlink" title="7、final"></a>7、final</h4><h5 id="（1）写final域的重排序规则"><a href="#（1）写final域的重排序规则" class="headerlink" title="（1）写final域的重排序规则"></a>（1）写final域的重排序规则</h5><p>  ​		写final域的重排序规则禁止把final域的写重排序到构造函数之外。</p>
+<p>  ​		该规则的实现依靠编译器在final域的写之后，构造函数return之前，插入一个StoreStore屏障。这个屏障禁止处理器把final域的写重排序到构造函数之外。</p>
+<p>  ​		写final域的重排序规则的作用：可以确保在对象引用为任意线程可见之前，对象的final域已经被正确初始化过了，而普通域不具备这个报障。</p>
+<h5 id="（2）读final域的重排序规则"><a href="#（2）读final域的重排序规则" class="headerlink" title="（2）读final域的重排序规则"></a>（2）读final域的重排序规则</h5><p>  ​		读final域的重排序规则是在一个线程中，初次读对象引用与随后初次读该对象包含的final域，JMM禁止处理器重排序这两个操作（注意该规则仅针对处理器）。</p>
+<p>  ​		该规则的实现依靠编译器在读final域操作的前面插入一个LoadLoad屏障。</p>
+<p>  ​		读final域的重排序规则的作用：可以确保在读一个对象的final域之前，一定会先读包含这个final域的对象的引用。如果引用不为null，那引用对象的final域一定已经被初始化了。</p>
+<hr>
+<p>  关于 volatile 详细解析：</p>
+<p>  <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/31990408/answer/1028941563">https://www.zhihu.com/question/31990408/answer/1028941563</a></p>
+<p>  <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/137193948">https://zhuanlan.zhihu.com/p/137193948</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/project/tags/Java/" rel="tag"># Java</a>
+              <a href="/project/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/project/2020/03/12/java-concurrent-1/" rel="prev" title="一、Java并发编程基础——预备知识">
+                  <i class="fa fa-chevron-left"></i> 一、Java并发编程基础——预备知识
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/project/2020/03/20/java-concurrent-4/" rel="next" title="四、Java并发编程——Java中的锁">
+                  四、Java并发编程——Java中的锁 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">量子猫</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/project/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
