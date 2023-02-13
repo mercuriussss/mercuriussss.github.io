@@ -5,47 +5,47 @@
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/project/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="1、CAS操作（1）简介CAS（compareAndSwap）是一种无锁的非阻塞算法的实现，它是一条原子指令，乐观锁的使用的机制就是CAS。 （2）原理在CAS方法中，CAS有三个操作数，内存值V，旧的预期值E，要修改的新值U。当且仅当预期值E和内存值V相等时，将内存值V修改为U，否则什么都不做。 （3）作用于CAS是一种无锁的非阻塞的算法实现，所以在线程数不多（并发量小）的情况下，它的性能要比s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="四、Java并发编程——Java中的锁">
-<meta property="og:url" content="https://mercuriussss.github.io/project/2020/03/20/java-concurrent-4/index.html">
+<meta property="og:url" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-4/index.html">
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="1、CAS操作（1）简介CAS（compareAndSwap）是一种无锁的非阻塞算法的实现，它是一条原子指令，乐观锁的使用的机制就是CAS。 （2）原理在CAS方法中，CAS有三个操作数，内存值V，旧的预期值E，要修改的新值U。当且仅当预期值E和内存值V相等时，将内存值V修改为U，否则什么都不做。 （3）作用于CAS是一种无锁的非阻塞的算法实现，所以在线程数不多（并发量小）的情况下，它的性能要比s">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard-1614670869116.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard-1614674843402.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard-1614674982576.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard-1614675272036.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard-1614675286650.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard-1614670869116.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard-1614674843402.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard-1614674982576.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard-1614675272036.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard-1614675286650.png">
 <meta property="article:published_time" content="2020-03-20T07:10:30.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.549Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/project/java-concurrent-4/clipboard-1614670869116.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/java-concurrent-4/clipboard-1614670869116.png">
 
 
-<link rel="canonical" href="https://mercuriussss.github.io/project/2020/03/20/java-concurrent-4/">
+<link rel="canonical" href="https://mercuriussss.github.io/2020/03/20/java-concurrent-4/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2020/03/20/java-concurrent-4/","path":"2020/03/20/java-concurrent-4/","title":"四、Java并发编程——Java中的锁"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/2020/03/20/java-concurrent-4/","path":"2020/03/20/java-concurrent-4/","title":"四、Java并发编程——Java中的锁"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>四、Java并发编程——Java中的锁 | 量子猫</title>
@@ -59,7 +59,7 @@
 
 
   <noscript>
-    <link rel="stylesheet" href="/project/css/noscript.css">
+    <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 </head>
 
@@ -79,7 +79,7 @@
 
   <div class="site-meta">
 
-    <a href="/project/" class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">量子猫</p>
       <i class="logo-line"></i>
@@ -97,7 +97,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -155,14 +155,14 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="量子猫"
-      src="/project/images/xz.jpg">
+      src="/images/xz.jpg">
   <p class="site-author-name" itemprop="name">量子猫</p>
   <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-        <a href="/project/archives/">
+        <a href="/archives/">
           <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
@@ -195,10 +195,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2020/03/20/java-concurrent-4/">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/2020/03/20/java-concurrent-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="image" content="/images/xz.jpg">
       <meta itemprop="name" content="量子猫">
     </span>
 
@@ -256,7 +256,7 @@
 </ul>
 <h3 id="2、Synchronized锁"><a href="#2、Synchronized锁" class="headerlink" title="2、Synchronized锁"></a>2、Synchronized锁</h3><h4 id="（1）简介-1"><a href="#（1）简介-1" class="headerlink" title="（1）简介"></a>（1）简介</h4><p>synchronized 是 Java 的一个关键字，用它来修饰代码块（方法），能够将代码块（方法）锁起来。</p>
 <p>它主要作用是确保多个线程在同一个时刻，只能有一个线程处于方法或者同步块中。它保证了其他线程对变量的<strong>可见性</strong>（被修饰的代码块是一次性执行，没有其他线程同时访问）和线程对变量操作的<strong>原子性</strong>（执行完 synchronized 后，修改后的变量对其他线程可见），从而保证了并发下的线程安全。</p>
-<p><img src="/project/java-concurrent-4/clipboard-1614670869116.png" alt="img"></p>
+<p><img src="/java-concurrent-4/clipboard-1614670869116.png" alt="img"></p>
 <div align="center" style="font-size:12px">图4-1 synchronized 锁思维导图</div>
 
 <h4 id="（2）特性"><a href="#（2）特性" class="headerlink" title="（2）特性"></a>（2）特性</h4><ul>
@@ -290,7 +290,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">methodA</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">    <span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">        <span class="comment">//do something 1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">        <span class="comment">//do something 2</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">methodB</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">    <span class="keyword">synchronized</span> (obj) &#123;</span><br><span class="line">        <span class="comment">//do something 1</span></span><br><span class="line">        <span class="comment">//do something 2</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p>synchronized 锁的升级完整流程图，如下所示</p>
-<p><img src="/project/java-concurrent-4/clipboard.png" alt="img"></p>
+<p><img src="/java-concurrent-4/clipboard.png" alt="img"></p>
 <div align="center" style="font-size:12px">图4-2 synchronized 锁升级流程图</div>
 
 <h3 id="3、Lock-接口"><a href="#3、Lock-接口" class="headerlink" title="3、Lock 接口"></a>3、Lock 接口</h3><h4 id="（1）简介-2"><a href="#（1）简介-2" class="headerlink" title="（1）简介"></a>（1）简介</h4><p>在Lock接口出现之前，Java 程序是靠 synchronized 关键字实现锁功能的，而 JDK 1.5 之后，JUC 包中新增了 Lock 接口（以及相关实现类）用来实现锁功能。它提供了与 synchronized 关键字类似的同步功能，只是在使用时需要显式地获取和释放锁。</p>
@@ -321,7 +321,7 @@
 
 <p>状态信息通过protected类型的 getState，setState，compareAndSetState 进行操作。</p>
 <p>这里volatile能够保证多线程下的可见性，当 state&#x3D;1 则代表当前对象锁已经被占有，其他线程来加锁时则会失败，加锁失败的线程会被放入一个FIFO的等待队列中，比列会被UNSAFE.park()操作挂起，等待其他获取锁的线程释放锁才能够被唤醒。</p>
-<p><img src="/project/java-concurrent-4/clipboard-1614674843402.png" alt="img"></p>
+<p><img src="/java-concurrent-4/clipboard-1614674843402.png" alt="img"></p>
 <div align="center" style="font-size:12px">图4-3 AQS的实现原理图</div>
 
 <h4 id="（3）AQS支持的两种同步方式"><a href="#（3）AQS支持的两种同步方式" class="headerlink" title="（3）AQS支持的两种同步方式"></a>（3）AQS支持的两种同步方式</h4><p>独占式（非公平锁）：如 ReentrantLock</p>
@@ -329,7 +329,7 @@
 <p>非公平锁和公平锁的区别：非公平锁性能高于公平锁性能。非公平锁可以减少CPU唤醒线程的开销，整体的吞吐效率会高点，CPU也不必取唤醒所有线程，会减少唤起线程的数量</p>
 <p>非公平锁性能虽然优于公平锁，但是会存在导致线程饥饿的情况。在最坏的情况下，可能存在某个线程一直获取不到锁。不过相比性能而言，饥饿问题可以暂时忽略，这可能就是 ReentrantLock 默认创建非公平锁的原因之一了。</p>
 <h3 id="5、重入锁ReentrantLock"><a href="#5、重入锁ReentrantLock" class="headerlink" title="5、重入锁ReentrantLock"></a>5、重入锁ReentrantLock</h3><h4 id="（1）简介-4"><a href="#（1）简介-4" class="headerlink" title="（1）简介"></a>（1）简介</h4><p>重入锁 ReentrantLock，顾名思义，就是支持重进入的锁，它表示该锁能够支持一个线程对资源的重复加锁。除此之外，该锁的还支持获取锁时的公平和非公平性选择。</p>
-<h4 id="（3）ReentrantLock与Synchronized的区别"><a href="#（3）ReentrantLock与Synchronized的区别" class="headerlink" title="（3）ReentrantLock与Synchronized的区别"></a>（3）ReentrantLock与Synchronized的区别</h4><p><img src="/project/java-concurrent-4/clipboard-1614674982576.png" alt="img"></p>
+<h4 id="（3）ReentrantLock与Synchronized的区别"><a href="#（3）ReentrantLock与Synchronized的区别" class="headerlink" title="（3）ReentrantLock与Synchronized的区别"></a>（3）ReentrantLock与Synchronized的区别</h4><p><img src="/java-concurrent-4/clipboard-1614674982576.png" alt="img"></p>
 <div align="center" style="font-size:12px">图4-4 ReentrantLock与Synchronized的区别图</div>
 
 <h3 id="6、读写锁"><a href="#6、读写锁" class="headerlink" title="6、读写锁"></a>6、读写锁</h3><h4 id="（1）简介-5"><a href="#（1）简介-5" class="headerlink" title="（1）简介"></a>（1）简介</h4><p>ReentrantLock 和 synchronized 都是排它锁，这些锁在同一时刻只允许一个线程进行访问，而读写锁在同一时刻可以允许多个读线程访问，在写线程访问的时候其他的读线程和写线程都会被阻塞。</p>
@@ -356,11 +356,11 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ReentrantLock 实现源码学习</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 一枝花算不算浪漫</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2020/4/28 7:20</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReentrantLockDemo</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Condition</span> <span class="variable">condition</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;线程一加锁成功&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;线程一执行await被挂起&quot;</span>);</span><br><span class="line">                condition.await();</span><br><span class="line">                System.out.println(<span class="string">&quot;线程一被唤醒成功&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">                System.out.println(<span class="string">&quot;线程一释放锁成功&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;线程二加锁成功&quot;</span>);</span><br><span class="line">                condition.signal();</span><br><span class="line">                System.out.println(<span class="string">&quot;线程二唤醒线程一&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">                System.out.println(<span class="string">&quot;线程二释放锁成功&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>执行效果如下：</p>
-<p><img src="/project/java-concurrent-4/clipboard-1614675272036.png" alt="img"></p>
+<p><img src="/java-concurrent-4/clipboard-1614675272036.png" alt="img"></p>
 <div align="center" style="font-size:12px">图4-5 Condition示例代码执行结果图</div>
 
 <p>代码执行流程如下：</p>
-<p><img src="/project/java-concurrent-4/clipboard-1614675286650.png" alt="img"></p>
+<p><img src="/java-concurrent-4/clipboard-1614675286650.png" alt="img"></p>
 <div align="center" style="font-size:12px">图4-6 Condition示例代码执行流程图</div>
 
 <h4 id="（3）Condition-与-await-x2F-notify-的比较"><a href="#（3）Condition-与-await-x2F-notify-的比较" class="headerlink" title="（3）Condition 与 await&#x2F;notify 的比较"></a>（3）Condition 与 await&#x2F;notify 的比较</h4><ul>
@@ -377,21 +377,21 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/project/tags/Java/" rel="tag"># Java</a>
-              <a href="/project/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/project/2020/03/17/java-concurrent-2/" rel="prev" title="二、Java并发编程基础——Java内存模型（JMM）">
-                  <i class="fa fa-chevron-left"></i> 二、Java并发编程基础——Java内存模型（JMM）
+                <a href="/2020/03/20/java-concurrent-3/" rel="prev" title="三、Java并发编程基础——线程">
+                  <i class="fa fa-chevron-left"></i> 三、Java并发编程基础——线程
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/project/2020/03/20/java-concurrent-3/" rel="next" title="三、Java并发编程基础——线程">
-                  三、Java并发编程基础——线程 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/03/20/java-collection-1/" rel="next" title="为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许">
+                  为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -438,10 +438,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/project/js/third-party/search/local-search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 

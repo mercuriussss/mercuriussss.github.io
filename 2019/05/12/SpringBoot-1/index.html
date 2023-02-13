@@ -5,44 +5,44 @@
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/project/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="第一个BUG首先是原初之罪的BUG，出现了找不到Bean的情况   中间是怎么解决的我忘记了，还引出一个新建的maven module没有配置Sources Root、Test Sources Root等相应文件夹，后面这个通过Project Structure的Modules设置和Module自身的.imi文件设置就能解决 第二个BUG解决了这些后，又TM引出了一个BUG  无论都导入不了tk.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot项目中关于maven依赖冲突的BUG处理(搞了一天的BUG)">
-<meta property="og:url" content="https://mercuriussss.github.io/project/2019/05/12/SpringBoot-1/index.html">
+<meta property="og:url" content="https://mercuriussss.github.io/2019/05/12/SpringBoot-1/index.html">
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="第一个BUG首先是原初之罪的BUG，出现了找不到Bean的情况   中间是怎么解决的我忘记了，还引出一个新建的maven module没有配置Sources Root、Test Sources Root等相应文件夹，后面这个通过Project Structure的Modules设置和Module自身的.imi文件设置就能解决 第二个BUG解决了这些后，又TM引出了一个BUG  无论都导入不了tk.">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/1.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/2.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/3.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/4.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/5.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/6.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/7.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/8.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/9.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/10.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/11.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/12.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/13.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/14.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/15.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/16.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/SpringBoot-1/17.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/1.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/2.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/3.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/4.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/5.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/6.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/7.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/8.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/9.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/10.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/11.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/12.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/13.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/14.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/15.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/16.png">
+<meta property="og:image" content="https://mercuriussss.github.io/SpringBoot-1/17.png">
 <meta property="article:published_time" content="2019-05-11T17:04:11.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.493Z">
 <meta property="article:author" content="量子猫">
@@ -50,14 +50,14 @@
 <meta property="article:tag" content="bug">
 <meta property="article:tag" content="maven">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/project/SpringBoot-1/1.jpg">
+<meta name="twitter:image" content="https://mercuriussss.github.io/SpringBoot-1/1.jpg">
 
 
-<link rel="canonical" href="https://mercuriussss.github.io/project/2019/05/12/SpringBoot-1/">
+<link rel="canonical" href="https://mercuriussss.github.io/2019/05/12/SpringBoot-1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2019/05/12/SpringBoot-1/","path":"2019/05/12/SpringBoot-1/","title":"SpringBoot项目中关于maven依赖冲突的BUG处理(搞了一天的BUG)"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/2019/05/12/SpringBoot-1/","path":"2019/05/12/SpringBoot-1/","title":"SpringBoot项目中关于maven依赖冲突的BUG处理(搞了一天的BUG)"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>SpringBoot项目中关于maven依赖冲突的BUG处理(搞了一天的BUG) | 量子猫</title>
@@ -71,7 +71,7 @@
 
 
   <noscript>
-    <link rel="stylesheet" href="/project/css/noscript.css">
+    <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 </head>
 
@@ -91,7 +91,7 @@
 
   <div class="site-meta">
 
-    <a href="/project/" class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">量子猫</p>
       <i class="logo-line"></i>
@@ -109,7 +109,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -167,14 +167,14 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="量子猫"
-      src="/project/images/xz.jpg">
+      src="/images/xz.jpg">
   <p class="site-author-name" itemprop="name">量子猫</p>
   <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-        <a href="/project/archives/">
+        <a href="/archives/">
           <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
@@ -207,10 +207,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2019/05/12/SpringBoot-1/">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/2019/05/12/SpringBoot-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="image" content="/images/xz.jpg">
       <meta itemprop="name" content="量子猫">
     </span>
 
@@ -257,37 +257,37 @@
     
     <div class="post-body" itemprop="articleBody">
         <h3 id="第一个BUG"><a href="#第一个BUG" class="headerlink" title="第一个BUG"></a>第一个BUG</h3><p>首先是原初之罪的BUG，出现了找不到Bean的情况</p>
-<p><img src="/project/SpringBoot-1/1.jpg" alt="d2e1a8ec8c959c5b8079cdd030f938f2.jpeg"></p>
-<p><img src="/project/SpringBoot-1/2.png" alt="bb5fc51a0ca7e3047a08f22768885e58.png"></p>
+<p><img src="/SpringBoot-1/1.jpg" alt="d2e1a8ec8c959c5b8079cdd030f938f2.jpeg"></p>
+<p><img src="/SpringBoot-1/2.png" alt="bb5fc51a0ca7e3047a08f22768885e58.png"></p>
 <p>中间是怎么解决的我忘记了，还引出一个新建的maven module没有配置<code>Sources Root</code>、<code>Test Sources Root</code>等相应文件夹，后面这个通过<code>Project Structure</code>的Modules设置和Module自身的<code>.imi</code>文件设置就能解决</p>
 <h3 id="第二个BUG"><a href="#第二个BUG" class="headerlink" title="第二个BUG"></a>第二个BUG</h3><p>解决了这些后，又TM引出了一个BUG</p>
-<p><img src="/project/SpringBoot-1/3.jpg" alt="32f7aeaf6df06b606f7d856afb5c3a43.jpeg"></p>
+<p><img src="/SpringBoot-1/3.jpg" alt="32f7aeaf6df06b606f7d856afb5c3a43.jpeg"></p>
 <p>无论都导入不了<code>tk.mybatis.mapper.common.Mapper</code>包</p>
-<p><img src="/project/SpringBoot-1/4.png" alt="78c2033d6d8888c7b3449d8e79deccce.png"></p>
+<p><img src="/SpringBoot-1/4.png" alt="78c2033d6d8888c7b3449d8e79deccce.png"></p>
 <p>搞了半天都没处理好的我，毅然决然地使用了暴力破除法，直接重建一个项目，再将这个项目的东西搬过去，然后就好了……</p>
-<p><img src="/project/SpringBoot-1/5.jpg" alt="6804a1bfd13a933e956ce57d118d655a.jpeg"></p>
+<p><img src="/SpringBoot-1/5.jpg" alt="6804a1bfd13a933e956ce57d118d655a.jpeg"></p>
 <p>本以为这样终于结束了，因为到这里已经花掉我半天时间了</p>
 <p>——但！是！</p>
-<p><img src="/project/SpringBoot-1/6.jpg" alt="b20c8506f2ee9d6a261b6e4604f94bf4.jpeg"></p>
+<p><img src="/SpringBoot-1/6.jpg" alt="b20c8506f2ee9d6a261b6e4604f94bf4.jpeg"></p>
 <h3 id="第三个BUG"><a href="#第三个BUG" class="headerlink" title="第三个BUG"></a>第三个BUG</h3><p>这里又双叒叕冒出来一个BUG了</p>
-<p><img src="/project/SpringBoot-1/7.jpg" alt="9e90f455f45ebbed3c8139b41f1f110a.jpeg"></p>
-<p><img src="/project/SpringBoot-1/8.png" alt="bcd9aced33b70b25aba20f0aec0e4d12.png"></p>
-<p><img src="/project/SpringBoot-1/9.png" alt="0df1b442e2f7e6c593e4d1ac05bc4ad3.png"></p>
-<p><img src="/project/SpringBoot-1/10.png" alt="77dcd3abf10610a79d5833f9d84ac675.png"></p>
+<p><img src="/SpringBoot-1/7.jpg" alt="9e90f455f45ebbed3c8139b41f1f110a.jpeg"></p>
+<p><img src="/SpringBoot-1/8.png" alt="bcd9aced33b70b25aba20f0aec0e4d12.png"></p>
+<p><img src="/SpringBoot-1/9.png" alt="0df1b442e2f7e6c593e4d1ac05bc4ad3.png"></p>
+<p><img src="/SpringBoot-1/10.png" alt="77dcd3abf10610a79d5833f9d84ac675.png"></p>
 <p>查看了下出错的源代码，很明显的<code>NoSuchMethodError</code>，找不到对应方法，源代码也是干脆利落地给出了红色标注我当场就懵了，总不会是源代码自己出错吧，没理由啊，肯定是自己太菜了，哪里弄错了才对</p>
-<p><img src="/project/SpringBoot-1/11.png" alt="a4f69231210ab8cb51b1884d37802657.png"></p>
+<p><img src="/SpringBoot-1/11.png" alt="a4f69231210ab8cb51b1884d37802657.png"></p>
 <p>于是我又继续埋头苦干，边自己捣鼓，边去群里询问<br>期间从某个学习群的群友那里得到了一个可能是导错包了的原因，然后我想错了，以为是项目对于maven仓库包的引用导入有问题，需要更新下什么的，就把整个maven本地仓库删掉再重加载，再把项目的<code>Libraries</code>引用全删了再重新用<code>mvn compile</code>指令加载回来</p>
 <p>然后不出意外的——问题并没有得到解决<br>（理所当然的，因为问题根本就不是出在那里）</p>
-<p><img src="/project/SpringBoot-1/12.jpg" alt="b5d9abefeaed36b137494ee2e77ffc7f.jpeg"></p>
+<p><img src="/SpringBoot-1/12.jpg" alt="b5d9abefeaed36b137494ee2e77ffc7f.jpeg"></p>
 <p>最后发现是<code>pom.xml</code>配置文件里面的依赖冲突导致的，将其那段多余的冲突依赖删掉后就没事了</p>
-<p><img src="/project/SpringBoot-1/13.png" alt="c26f422bafc783c442ad6431774e7bf0.png"></p>
-<p><img src="/project/SpringBoot-1/14.png" alt="18a54ef3a379e6292ede09ed488574a6.png"></p>
+<p><img src="/SpringBoot-1/13.png" alt="c26f422bafc783c442ad6431774e7bf0.png"></p>
+<p><img src="/SpringBoot-1/14.png" alt="18a54ef3a379e6292ede09ed488574a6.png"></p>
 <h3 id="处理依赖冲突的maven-helper插件"><a href="#处理依赖冲突的maven-helper插件" class="headerlink" title="处理依赖冲突的maven helper插件"></a>处理依赖冲突的maven helper插件</h3><p>最后有个群友推荐了IDEA的一个专门处理maven依赖冲突的插件，<code>maven helper</code>，下载好了后重启，即可使用</p>
-<p><img src="/project/SpringBoot-1/15.png" alt="e39647badb576da80b60668ba938554d.png"></p>
+<p><img src="/SpringBoot-1/15.png" alt="e39647badb576da80b60668ba938554d.png"></p>
 <p>重启后进入<code>pom.xml</code>配置文件内，可看到以下内容</p>
-<p><img src="/project/SpringBoot-1/16.png" alt="bd4b7cbf67899e520830843266f12890.png"></p>
+<p><img src="/SpringBoot-1/16.png" alt="bd4b7cbf67899e520830843266f12890.png"></p>
 <p>使用时，右键可以将用不到的版本<code>Exclude</code>掉，不过要解决问题大多没那么简单直接<code>Exclude</code>就能完事的，相关教程什么的可以去网上找，这里就不多说了</p>
-<p><img src="/project/SpringBoot-1/17.png" alt="4173b9cb6ffa4c081718e22073b9ac53.png"></p>
+<p><img src="/SpringBoot-1/17.png" alt="4173b9cb6ffa4c081718e22073b9ac53.png"></p>
 
     </div>
 
@@ -297,21 +297,21 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/project/tags/springboot/" rel="tag"># springboot</a>
-              <a href="/project/tags/bug/" rel="tag"># bug</a>
-              <a href="/project/tags/maven/" rel="tag"># maven</a>
+              <a href="/tags/springboot/" rel="tag"># springboot</a>
+              <a href="/tags/bug/" rel="tag"># bug</a>
+              <a href="/tags/maven/" rel="tag"># maven</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/project/2019/04/30/hexo-next-1/" rel="prev" title="Next主题从5.1版本升级到7.1的捣鼓">
+                <a href="/2019/04/30/hexo-next-1/" rel="prev" title="Next主题从5.1版本升级到7.1的捣鼓">
                   <i class="fa fa-chevron-left"></i> Next主题从5.1版本升级到7.1的捣鼓
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/project/2019/09/10/jvm-1/" rel="next" title="一、Java内存区域">
+                <a href="/2019/09/10/jvm-1/" rel="next" title="一、Java内存区域">
                   一、Java内存区域 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -359,10 +359,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/project/js/third-party/search/local-search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 

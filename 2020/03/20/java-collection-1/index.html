@@ -5,43 +5,43 @@
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/project/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="1、底层源码实现HashMap 在添加空键时做了特殊处理，若key为空则哈希值为0，value 则是没判空过滤操作 1234567public V put(K key, V value) &amp;#123;    return putVal(hash(key), key, value, false, true);&amp;#125;static final int hash(Object key) &amp;#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许">
-<meta property="og:url" content="https://mercuriussss.github.io/project/2020/03/20/java-collection-1/index.html">
+<meta property="og:url" content="https://mercuriussss.github.io/2020/03/20/java-collection-1/index.html">
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="1、底层源码实现HashMap 在添加空键时做了特殊处理，若key为空则哈希值为0，value 则是没判空过滤操作 1234567public V put(K key, V value) &amp;#123;    return putVal(hash(key), key, value, false, true);&amp;#125;static final int hash(Object key) &amp;#123;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/project/2020/03/20/java-collection-1/java-collection-1/1.gif">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-collection-1/image-20210228130138217.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/03/20/java-collection-1/java-collection-1/1.gif">
+<meta property="og:image" content="https://mercuriussss.github.io/java-collection-1/image-20210228130138217.png">
 <meta property="article:published_time" content="2020-03-20T09:50:40.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.524Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Java集合">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/project/2020/03/20/java-collection-1/java-collection-1/1.gif">
+<meta name="twitter:image" content="https://mercuriussss.github.io/2020/03/20/java-collection-1/java-collection-1/1.gif">
 
 
-<link rel="canonical" href="https://mercuriussss.github.io/project/2020/03/20/java-collection-1/">
+<link rel="canonical" href="https://mercuriussss.github.io/2020/03/20/java-collection-1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2020/03/20/java-collection-1/","path":"2020/03/20/java-collection-1/","title":"为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/2020/03/20/java-collection-1/","path":"2020/03/20/java-collection-1/","title":"为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>为何 Hashtable、ConcurrentHashMap 不允许键或值为空，而 HashMap 允许 | 量子猫</title>
@@ -55,7 +55,7 @@
 
 
   <noscript>
-    <link rel="stylesheet" href="/project/css/noscript.css">
+    <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 </head>
 
@@ -75,7 +75,7 @@
 
   <div class="site-meta">
 
-    <a href="/project/" class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">量子猫</p>
       <i class="logo-line"></i>
@@ -93,7 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -151,14 +151,14 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="量子猫"
-      src="/project/images/xz.jpg">
+      src="/images/xz.jpg">
   <p class="site-author-name" itemprop="name">量子猫</p>
   <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-        <a href="/project/archives/">
+        <a href="/archives/">
           <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
@@ -191,10 +191,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2020/03/20/java-collection-1/">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/2020/03/20/java-collection-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="image" content="/images/xz.jpg">
       <meta itemprop="name" content="量子猫">
     </span>
 
@@ -278,7 +278,7 @@
 <h3 id="3、key-为不为空的限制原因"><a href="#3、key-为不为空的限制原因" class="headerlink" title="3、key 为不为空的限制原因"></a>3、key 为不为空的限制原因</h3><p>emmmm，这个问题就很有意思了，我想了半天也想不出为什么，直到我在网上找到一篇文章，写到了早在 2006 年就有人在网上发出求助邮件、里面就有提到这个问题，而回答这封邮件的人里就有 JUC 包的作者 <strong>Doug Lea</strong> ，以及 HashMap 的作者之一 <strong>Josh Bloch</strong>，两个巨佬的答复中直接给出了答案：</p>
 <div align="center"><del>他们乐意</del></div>
 
-<p><img src="/project/java-collection-1/image-20210228130138217.png" alt="image-20210228130138217"></p>
+<p><img src="/java-collection-1/image-20210228130138217.png" alt="image-20210228130138217"></p>
 <p>Doug Lea 讨厌 null 值，他觉得允许 null 的设计本身就是不合理的，而 Josh Bloch 也快被他说服了，觉得这或许是个错误，但他自己也不是很确定。</p>
 <p><del>Josh Bloch：或许是我错了但我就是不想改</del></p>
 <p>俩人似乎讨论这个问题已经很久了……事实就是这么操蛋。</p>
@@ -293,20 +293,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/project/tags/Java/" rel="tag"># Java</a>
-              <a href="/project/tags/Java%E9%9B%86%E5%90%88/" rel="tag"># Java集合</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Java%E9%9B%86%E5%90%88/" rel="tag"># Java集合</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/project/2020/03/20/java-concurrent-3/" rel="prev" title="三、Java并发编程基础——线程">
-                  <i class="fa fa-chevron-left"></i> 三、Java并发编程基础——线程
+                <a href="/2020/03/20/java-concurrent-4/" rel="prev" title="四、Java并发编程——Java中的锁">
+                  <i class="fa fa-chevron-left"></i> 四、Java并发编程——Java中的锁
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/project/2020/05/12/redis-d&a-1/" rel="next" title="一、简单动态字符串">
+                <a href="/2020/05/12/redis-d&a-1/" rel="next" title="一、简单动态字符串">
                   一、简单动态字符串 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -354,10 +354,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/project/js/third-party/search/local-search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 

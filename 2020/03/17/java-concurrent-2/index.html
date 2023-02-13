@@ -5,44 +5,44 @@
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/project/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/project/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/project/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/project/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/project/css/main.css">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/project/","images":"/project/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/project/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/project/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="1、硬件的利用效率与一致性​		由于计算机的存储设备与处理器的运算速度相差好几个数量级，CPU经常需要等待主存，白白浪费资源，所以现代计算机加入一层或多层读写速度尽可能接近处理器运算速度的高速缓存（Cache）来作为内存与处理器之间的缓冲 ( 结构 : cpu -&gt; cache -&gt; memory ) 。 ​		这种CPU多级缓存的方式很好地解决了CPU与内存速度之间的矛盾，但也引入了">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二、Java并发编程基础——Java内存模型（JMM）">
-<meta property="og:url" content="https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/index.html">
+<meta property="og:url" content="https://mercuriussss.github.io/2020/03/17/java-concurrent-2/index.html">
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="1、硬件的利用效率与一致性​		由于计算机的存储设备与处理器的运算速度相差好几个数量级，CPU经常需要等待主存，白白浪费资源，所以现代计算机加入一层或多层读写速度尽可能接近处理器运算速度的高速缓存（Cache）来作为内存与处理器之间的缓冲 ( 结构 : cpu -&gt; cache -&gt; memory ) 。 ​		这种CPU多级缓存的方式很好地解决了CPU与内存速度之间的矛盾，但也引入了">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard-1613641790425.png">
-<meta property="og:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard-1614355781698.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-2/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-2/clipboard-1613641790425.png">
+<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-2/clipboard-1614355781698.png">
 <meta property="article:published_time" content="2020-03-17T07:22:34.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.540Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/project/java-concurrent-2/clipboard.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/java-concurrent-2/clipboard.png">
 
 
-<link rel="canonical" href="https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/">
+<link rel="canonical" href="https://mercuriussss.github.io/2020/03/17/java-concurrent-2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/","path":"2020/03/17/java-concurrent-2/","title":"二、Java并发编程基础——Java内存模型（JMM）"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/2020/03/17/java-concurrent-2/","path":"2020/03/17/java-concurrent-2/","title":"二、Java并发编程基础——Java内存模型（JMM）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>二、Java并发编程基础——Java内存模型（JMM） | 量子猫</title>
@@ -56,7 +56,7 @@
 
 
   <noscript>
-    <link rel="stylesheet" href="/project/css/noscript.css">
+    <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 </head>
 
@@ -76,7 +76,7 @@
 
   <div class="site-meta">
 
-    <a href="/project/" class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">量子猫</p>
       <i class="logo-line"></i>
@@ -94,7 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/project/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/project/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/project/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/project/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -152,14 +152,14 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="量子猫"
-      src="/project/images/xz.jpg">
+      src="/images/xz.jpg">
   <p class="site-author-name" itemprop="name">量子猫</p>
   <div class="site-description" itemprop="description">Stay Hungry, Stay Foolish</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-        <a href="/project/archives/">
+        <a href="/archives/">
           <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
@@ -192,10 +192,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/project/2020/03/17/java-concurrent-2/">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/2020/03/17/java-concurrent-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/project/images/xz.jpg">
+      <meta itemprop="image" content="/images/xz.jpg">
       <meta itemprop="name" content="量子猫">
     </span>
 
@@ -262,7 +262,7 @@
 </ul>
 <p>​		JMM 规定了所有的变量都存储在主内存中，每个线程都有自己的工作内存，线程的工作内存中保存的是当前线程使用到的变量值的副本（从主内存拷贝过来的）。</p>
 <p>​		线程对变量的所有操作都必须在工作内存中进行，不能直接读写主内存中的数据，线程之间的相互传值也需要通过主内存来完成。</p>
-<p><img src="/project/java-concurrent-2/clipboard.png" alt="img"></p>
+<p><img src="/java-concurrent-2/clipboard.png" alt="img"></p>
 <div align="center" style="font-size:12px">图2-1 线程、主内存、工作内存三者的交互关系</div>
 
 <h4 id="3、八种原子操作与执行规则"><a href="#3、八种原子操作与执行规则" class="headerlink" title="3、八种原子操作与执行规则"></a>3、八种原子操作与执行规则</h4><h5 id="（1）八种原子操作"><a href="#（1）八种原子操作" class="headerlink" title="（1）八种原子操作"></a>（1）八种原子操作</h5><p>Java内存模型定义了以下 8 种操作来完成主内存与工作内存交互的工作：</p>
@@ -281,7 +281,7 @@
 </li>
 <li><p>**store (存储)**：作用于工作内存的变量，它把工作内存中的一个变量的值传送到主内存中，以便随后的 wirte 操作使用。</p>
 </li>
-<li><p>**wirte (写入)**：作用于主内存的变量，它把 store 操作从工作内存中得到的变量值放入主内存中。<img src="/project/java-concurrent-2/clipboard-1613641790425.png" alt="img"></p>
+<li><p>**wirte (写入)**：作用于主内存的变量，它把 store 操作从工作内存中得到的变量值放入主内存中。<img src="/java-concurrent-2/clipboard-1613641790425.png" alt="img"></p>
 <div align="center" style="font-size:12px">图2-2 同步操作与规则图</div>
 
 <h5 id="（2）执行规则"><a href="#（2）执行规则" class="headerlink" title="（2）执行规则"></a>（2）执行规则</h5><p>这 8 种原子操作的执行规则大致可以划分为两类，一类是有关变量拷贝过程的规则，另一类是有关加锁的规则。</p>
@@ -356,7 +356,7 @@
 <p>  ​		②<strong>禁止指令重排序优化</strong></p>
 <p>  ​		普通变量仅会保证在该方法的执行过程中，所有依赖赋值结果的地方都能获取到正确的结果，而不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。</p>
 <p>  ​		编译时JVM编译器遵循内存屏障的约束，运行时依靠CPU屏障指令来阻止重排。</p>
-<p>  <img src="/project/java-concurrent-2/clipboard-1614355781698.png" alt="img"></p>
+<p>  <img src="/java-concurrent-2/clipboard-1614355781698.png" alt="img"></p>
   <div align="center" style="font-size:12px">图2-3 volatile读写的指令图</div>
 
 <h5 id="（3）-实现Happens-Before规则的要求"><a href="#（3）-实现Happens-Before规则的要求" class="headerlink" title="（3） 实现Happens-Before规则的要求"></a>（3） 实现Happens-Before规则的要求</h5><p>  ​		Happens-Before 原则的规定保证了操作间的可见性，volatile 变量保证了有序性和可见性，volatile 的特性得以于Java语言中的 Happens-Before 规则。		</p>
@@ -415,21 +415,21 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/project/tags/Java/" rel="tag"># Java</a>
-              <a href="/project/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"># 并发</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/project/2020/03/12/java-concurrent-1/" rel="prev" title="一、Java并发编程基础——预备知识">
+                <a href="/2020/03/12/java-concurrent-1/" rel="prev" title="一、Java并发编程基础——预备知识">
                   <i class="fa fa-chevron-left"></i> 一、Java并发编程基础——预备知识
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/project/2020/03/20/java-concurrent-4/" rel="next" title="四、Java并发编程——Java中的锁">
-                  四、Java并发编程——Java中的锁 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/03/20/java-concurrent-3/" rel="next" title="三、Java并发编程基础——线程">
+                  三、Java并发编程基础——线程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -476,10 +476,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/project/js/comments.js"></script><script src="/project/js/utils.js"></script><script src="/project/js/motion.js"></script><script src="/project/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/project/js/third-party/search/local-search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
