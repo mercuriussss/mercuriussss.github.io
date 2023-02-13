@@ -2542,3 +2542,17 @@ mark.search-keyword {
     padding: 10px 12px;
   }
 }
+body {
+  background: url("/images/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+}
+.main-inner {
+  background: #fff;
+  opacity: 0.85;
+}
+.header-inner {
+  background: rgba(255,255,255,0.85) !important;
+}
