@@ -26,15 +26,15 @@
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="1、含义 JVM以方法作为最基本的执行单元，“栈帧”（Stack Frame）则是用于支持JVM进行方法调用和方法执行背后的数据结构，它也是JVM运行时数据区中的虚拟机栈的栈元素。每个方法从调用开始到执行结束的过程，都对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。  图6-1 栈帧的概念结构  2、局部变量表">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/jvm-6/clipboard.png">
-<meta property="og:image" content="https://mercuriussss.github.io/jvm-6/clipboard-1613628231657.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2019/09/18/jvm-6/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2019/09/18/jvm-6/clipboard-1613628231657.png">
 <meta property="article:published_time" content="2019-09-18T12:25:11.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.581Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/jvm-6/clipboard.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/2019/09/18/jvm-6/clipboard.png">
 
 
 <link rel="canonical" href="https://mercuriussss.github.io/2019/09/18/jvm-6/">
@@ -242,7 +242,7 @@
         <p><strong>1、含义</strong></p>
 <p>JVM以方法作为最基本的执行单元，“栈帧”（Stack Frame）则是用于支持JVM进行方法调用和方法执行背后的数据结构，它也是JVM运行时数据区中的虚拟机栈的栈元素。每个方法从调用开始到执行结束的过程，都对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
 <p>每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
-<p><img src="/jvm-6/clipboard.png" alt="img"></p>
+<p><img src="/2019/09/18/jvm-6/clipboard.png" alt="img"></p>
 <div align="center" style="font-size:12px">图6-1 栈帧的概念结构</div>
 
 <p><strong>2、局部变量表</strong></p>
@@ -262,7 +262,7 @@
 <li>Java虚拟机的解释执行引擎称为“基于栈的执行引擎”，其中所指的“栈”就是操作数栈。<strong>如果当前线程请求的栈深度大于虚拟机所允许的最大深度，将抛出StackOverflowError异常。</strong></li>
 <li>在概念模型中，两个栈帧是相互独立的。但是大多数虚拟机的实现都会进行优化，令两个栈帧出现一部分重叠。令下面的部分操作数栈与上面的局部变量表重叠在一块，这样在方法调用的时候可以共用一部分数据，无需进行额外的参数复制传递。</li>
 </ul>
-<p><img src="/jvm-6/clipboard-1613628231657.png" alt="img"></p>
+<p><img src="/2019/09/18/jvm-6/clipboard-1613628231657.png" alt="img"></p>
 <div align="center" style="font-size:12px">图6-2 两个栈帧之间的数据共享</div>
 
 <p><strong>4、动态连接</strong></p>

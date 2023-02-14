@@ -26,18 +26,18 @@
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="1、线程的概念​		进程是指一个内存中运行的应用程序，它是操作系统资源分配的最小单位。每个进程都有自己独立的一块内存空间，而一个进程中可以启动多个线程。 ​		线程是比进程更轻量级的调度执行单位，它是进程的一个执行单元。线程的引入可以把一个进程的资源分配和执行调度分开，各个线程之间既可以共享进程资源（内存地址、文件IO等），又可以独立调度。 2、线程的实现模型​	Java 使用的是 1：1 线程模">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-3/clipboard-1613641813843.png">
-<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-3/clipboard-1613641836218.png">
-<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-3/clipboard-1613641867631.png">
-<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-3/clipboard-1613641890655.png">
-<meta property="og:image" content="https://mercuriussss.github.io/java-concurrent-3/clipboard-1613641912554.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/clipboard-1613641813843.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/clipboard-1613641836218.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/clipboard-1613641867631.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/clipboard-1613641890655.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/clipboard-1613641912554.png">
 <meta property="article:published_time" content="2020-03-20T07:10:30.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.544Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/java-concurrent-3/clipboard-1613641813843.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/clipboard-1613641813843.png">
 
 
 <link rel="canonical" href="https://mercuriussss.github.io/2020/03/20/java-concurrent-3/">
@@ -249,7 +249,7 @@
 <h5 id="（1）内核线程实现（1：1实现）"><a href="#（1）内核线程实现（1：1实现）" class="headerlink" title="（1）内核线程实现（1：1实现）"></a>（1）内核线程实现（1：1实现）</h5><p>​		内核线程（Kernel-Level Thread，KLT）就是由操作系统内核（Kernel）支持的线程，这种线程由内核来完成线程切换操作。</p>
 <p>​		程序一般不会直接使用内核线程（那样太危险了），而是使用内核线程的一种高级接口——轻量级进程（Light Wegiht Process，LWP）来操作内核进程。轻量级进程即我们常说的线程，由于每个轻量级线程都由一个内核线程支持，也就是说 LWP 和KLT 之间是 1：1 的关系，因此也称这种模型为一对一的线程模型。</p>
 <p>​		这类似于一种代理模式，LWP 就是代理对象，而 KLT 则是被代理对象，我们把任务请求发给代理人 LWP，然后 LWP 会通过调用真实具备执行任务能力的被代理人 KLT 去执行任务。</p>
-<p><img src="/java-concurrent-3/clipboard-1613641813843.png" alt="img"></p>
+<p><img src="/2020/03/20/java-concurrent-3/clipboard-1613641813843.png" alt="img"></p>
 <div align="center" style="font-size:12px">图3-1 轻量级进程与内核线程之间1：1的关系图</div>
 
 <ul>
@@ -270,7 +270,7 @@
 </ul>
 <h5 id="（2）用户线程实现（1：N实现）"><a href="#（2）用户线程实现（1：N实现）" class="headerlink" title="（2）用户线程实现（1：N实现）"></a>（2）用户线程实现（1：N实现）</h5><p>​		广义上讲，一个线程只要不是 KLT ，都可以认为是用户线程（User Thread，UT）的一种。</p>
 <p>​		狭义上讲， UT 指的是完全建立在用户空间的线程，即操作系统感知不到线程的存在，只知道那个掌控着这些 UT 的进程 P 。因此，进程和 UT 之间的比例是 1：N 。</p>
-<p><img src="/java-concurrent-3/clipboard-1613641836218.png" alt="img"></p>
+<p><img src="/2020/03/20/java-concurrent-3/clipboard-1613641836218.png" alt="img"></p>
 <div align="center" style="font-size:12px">图3-2 进程与用户线程之间1：N的关系图</div>
 
 <ul>
@@ -292,7 +292,7 @@
 <p>现在使用 UT 的程序越来越少了，Java 和 Ruby 等语言都曾使用过 UT ，但最终又放弃了，而 Golang 、 Erlang 等以高并发为卖点的新语言则普遍支持了 UT 。</p>
 </blockquote>
 <h5 id="（3）用户线程加轻量级进程混合实现（N：M实现）"><a href="#（3）用户线程加轻量级进程混合实现（N：M实现）" class="headerlink" title="（3）用户线程加轻量级进程混合实现（N：M实现）"></a>（3）用户线程加轻量级进程混合实现（N：M实现）</h5><p>​		这种混合模式下，既存在 UT ，也存在 KLT ，被称之为 N：M 实现。</p>
-<p><img src="/java-concurrent-3/clipboard-1613641867631.png" alt="img"></p>
+<p><img src="/2020/03/20/java-concurrent-3/clipboard-1613641867631.png" alt="img"></p>
 <div align="center" style="font-size:12px">图3-3 用户线程与轻量级进程之间N：M的关系图</div>
 
 <p>该实现模型有以下特点：</p>
@@ -337,7 +337,7 @@
 <li><strong>阻塞：</strong>指线程在执行中因某件事而受阻，处于暂停执行的状态，并且放弃自己的CPU使用权。当它的阻塞状态结束了，它的状态会变为就绪状态，等待再次被分配 CPU 资源。</li>
 <li><strong>终止：</strong>当线程执行完或出现异常时，它就会进入终止状态，不会再切换到其他任何状态，这也意味着线程的生命周期结束了。</li>
 </ul>
-<p><img src="/java-concurrent-3/clipboard-1613641890655.png" alt="img"></p>
+<p><img src="/2020/03/20/java-concurrent-3/clipboard-1613641890655.png" alt="img"></p>
 <div align="center" style="font-size:12px">图3-4 通用的线程生命周期图</div>
 
 <h5 id="（2）Java-的线程生命周期"><a href="#（2）Java-的线程生命周期" class="headerlink" title="（2）Java 的线程生命周期"></a>（2）Java 的线程生命周期</h5><p>​		Java语言中线程共有六种状态：</p>
@@ -349,7 +349,7 @@
 <li><strong>阻塞（Blocked）</strong>：线程被阻塞了，“阻塞状态”与“等待状态”的区别是“阻塞状态”在等待着获取到一个排它锁，这个事件将在另外一个线程放弃这个锁的时候发生；而“等待状态”则是在等待一段时间，或者唤醒动作的发生。</li>
 <li><strong>结束（Terminated）</strong>：已终止线程的线程状态，线程已经结束执行。</li>
 </ul>
-<p><img src="/java-concurrent-3/clipboard-1613641912554.png" alt="img"></p>
+<p><img src="/2020/03/20/java-concurrent-3/clipboard-1613641912554.png" alt="img"></p>
 <div align="center" style="font-size:12px">图3-5 Java线程的生命周期图</div>
 
 <h4 id="5、Java-多线程的实现方式"><a href="#5、Java-多线程的实现方式" class="headerlink" title="5、Java 多线程的实现方式"></a>5、Java 多线程的实现方式</h4><h5 id="（1）继承-Thread-类"><a href="#（1）继承-Thread-类" class="headerlink" title="（1）继承 Thread 类"></a>（1）继承 Thread 类</h5><p>​		Java 中提供了一个 java.lang.Thread 的程序类，底层是继承了Runnable接口的实现类。一个类只需要继承此类就表示此类为线程的主体，再覆写一个run()方法，就可以使用start()方法启动线程了。</p>

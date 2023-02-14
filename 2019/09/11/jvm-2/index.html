@@ -26,17 +26,17 @@
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="对象的创建1.使用指令创建对象​		创建对象有多种方法，最常见的便是用New关键字创建对象，除此之外还可以使用反射机制（Class类的newInstance、使用Constructor类的newInstance方法）、Clone方法、反序列化等方式创建对象。 ​		由类加载器负责根据一个类的全限定名来读取此类的二进制字节流到JVM内部，并存储在运行时内存区的方法区，然后将其转换为一个与目标类型对应">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/jvm-2/1.png">
-<meta property="og:image" content="https://mercuriussss.github.io/jvm-2/clipboard.png">
-<meta property="og:image" content="https://mercuriussss.github.io/jvm-2/2.png">
-<meta property="og:image" content="https://mercuriussss.github.io/jvm-2/3.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2019/09/11/jvm-2/1.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2019/09/11/jvm-2/clipboard.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2019/09/11/jvm-2/2.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2019/09/11/jvm-2/3.png">
 <meta property="article:published_time" content="2019-09-10T16:52:31.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.567Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/jvm-2/1.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/2019/09/11/jvm-2/1.png">
 
 
 <link rel="canonical" href="https://mercuriussss.github.io/2019/09/11/jvm-2/">
@@ -261,7 +261,7 @@
 <li>如果对象是通过 ObjectInputStream 类的 readObject() 方法创建的，那么 JVM 通过从输入流中读入的序列化数据来初始化那些非暂时性(non-transient)的实例变量；</li>
 <li>如果实例变量在声明时被显式初始化，那么就把初始化值赋给实例变量，接着再执行构造方法。这是最常见的初始化对象的方式。</li>
 </ul>
-<h2 id="对于内存分配的两种方式"><a href="#对于内存分配的两种方式" class="headerlink" title="对于内存分配的两种方式"></a>对于内存分配的两种方式</h2><p><img src="/jvm-2/1.png" alt="1.png"></p>
+<h2 id="对于内存分配的两种方式"><a href="#对于内存分配的两种方式" class="headerlink" title="对于内存分配的两种方式"></a>对于内存分配的两种方式</h2><p><img src="/2019/09/11/jvm-2/1.png" alt="1.png"></p>
 <div align="center" style="font-size:12px">图2-1 内存分配的两种方式</div>
 
 <h2 id="对于内存分配的并发问题"><a href="#对于内存分配的并发问题" class="headerlink" title="对于内存分配的并发问题"></a>对于内存分配的并发问题</h2><h3 id="两种保障方式"><a href="#两种保障方式" class="headerlink" title="两种保障方式"></a>两种保障方式</h3><p>​		在创建对象的时候有一个很重要的问题，就是线程安全，因为在实际开发过程中，创建对象是很频繁的事情，作为虚拟机来说，必须要保证线程是安全的，通常来讲，虚拟机采用两种方式来保证线程安全：</p>
@@ -270,7 +270,7 @@
 <h4 id="3、关于TLAB的补充说明"><a href="#3、关于TLAB的补充说明" class="headerlink" title="3、关于TLAB的补充说明"></a>3、关于TLAB的补充说明</h4><p>&amp;emsp;&amp;emsp;JVM在内存新生代Eden Space中开辟了一小块线程私有的区域，称作TLAB（Thread-local allocation buffer，线程本地分配缓存区）。默认设定为占用Eden Space的1%。在Java程序中很多对象都是小对象且用过即丢，它们不存在线程共享也适合被快速GC，所以对于小对象通常JVM会优先分配在TLAB上，并且TLAB上的分配由于是线程私有所以没有锁开销。因此在实践中分配多个小对象的效率通常比分配一个大对象的效率要高。</p>
 <p>&amp;emsp;&amp;emsp;也就是说，Java中每个线程都会有自己的缓冲区称作TLAB（Thread-local allocation buffer），每个TLAB都只有一个线程可以操作，TLAB结合bump-the-pointer技术可以实现快速的对象分配，而不需要任何的锁进行同步，也就是说，在对象分配的时候不用锁住整个堆，而只需要在自己的缓冲区分配即可。</p>
 <h2 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h2><h3 id="1-对象头"><a href="#1-对象头" class="headerlink" title="1.对象头"></a>1.对象头</h3><p>​		Hotspot 虚拟机的对象头包括两部分信息，第一部分用于存储对象自身的自身运行时数据（哈希码、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等等），这部分数据称为“Mark Word“；另一部分是Class对象的类型指针（Klass Pointer），即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
-<p><img src="/jvm-2/clipboard.png" alt="img"></p>
+<p><img src="/2019/09/11/jvm-2/clipboard.png" alt="img"></p>
 <div align="center" style="font-size:12px">图2-2 64位JVM对象结构描述</div>
 
 <h3 id="2-实例数据"><a href="#2-实例数据" class="headerlink" title="2.实例数据"></a>2.实例数据</h3><p>&amp;emsp;&amp;emsp;实例数据部分是对象真正存储的有效信息，也是在程序中所定义的各种类型的字段内容。</p>
@@ -278,11 +278,11 @@
 <h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><p>&amp;emsp;&amp;emsp;建立对象就是为了使用对象，我们的 Java 程序通过栈上的 reference 数据来操作堆上的具体对象。对象的访问方式有虚拟机实现而定，目前主流的访问方式有两种。</p>
 <h3 id="1-使用句柄"><a href="#1-使用句柄" class="headerlink" title="1.使用句柄"></a>1.使用句柄</h3><p>​		如果使用句柄的话，那么 Java 堆中将会划分出一块内存来作为句柄池，reference 中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体地址信息</p>
 <p>​		使用句柄的好处：reference 中存储的是稳定的句柄地址，在对象被移动时（GC时很普遍会移动对象）只会改变句柄中的实例数据指针，而 reference 本身不需要修改</p>
-<p><img src="/jvm-2/2.png" alt="2.png"></p>
+<p><img src="/2019/09/11/jvm-2/2.png" alt="2.png"></p>
 <h3 id="2-使用直接指针"><a href="#2-使用直接指针" class="headerlink" title="2.使用直接指针"></a>2.使用直接指针</h3><p>​		如果使用直接指针访问，那么 Java 堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，而栈帧中的 reference 存储的直接就是对象的地址</p>
 <p>​		使用直接指针的好处：访问速度快，它节省了一次指针定位的时间开销。</p>
 <p>​		HotSpot虚拟机主要就是使用这种方式进行对象访问，但从整个软件开发的范围来看，在各种语言、框架中使用句柄访问的情况也十分常见。</p>
-<p> <img src="/jvm-2/3.png" alt="3.png"></p>
+<p> <img src="/2019/09/11/jvm-2/3.png" alt="3.png"></p>
 
     </div>
 

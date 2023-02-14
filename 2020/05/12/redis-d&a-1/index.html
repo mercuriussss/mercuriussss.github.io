@@ -26,14 +26,14 @@
 <meta property="og:site_name" content="量子猫">
 <meta property="og:description" content="1、SDS的数据结构与示例​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。 ​		简单动态字符串（Simple Dynamic String），简称 SDS，其底层实现如下所示。 12345struct sdshdr &amp;#123;    int len;     &#x2F;&#x2F;记录buf数组已使用字节数量，即字符串长度    int">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/redis-d&a-1/image-20210401100415782.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-20210401100415782.png">
 <meta property="article:published_time" content="2020-05-12T13:05:51.000Z">
 <meta property="article:modified_time" content="2023-02-13T09:41:19.583Z">
 <meta property="article:author" content="量子猫">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="Redis设计与实现">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/redis-d&a-1/image-20210401100415782.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-20210401100415782.png">
 
 
 <link rel="canonical" href="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/">
@@ -243,7 +243,7 @@
 <p>​		简单动态字符串（Simple Dynamic String），简称 SDS，其底层实现如下所示。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> len;     <span class="comment">//记录buf数组已使用字节数量，即字符串长度</span></span><br><span class="line">    <span class="type">int</span> <span class="built_in">free</span>;    <span class="comment">//记录buf数组未使用字节数量，即剩余空间</span></span><br><span class="line">    <span class="type">char</span> buf[];  <span class="comment">//字节数组，用于保存字符串</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/redis-d&a-1/image-20210401100415782.png" alt="image-20210401100415782"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-20210401100415782.png" alt="image-20210401100415782"></p>
 <div align="center" style="font-size:12px">图1-1 SDS数据结构示例图</div>
 
 <h4 id="2、SDS跟C字符串的区别（优势）"><a href="#2、SDS跟C字符串的区别（优势）" class="headerlink" title="2、SDS跟C字符串的区别（优势）"></a>2、SDS跟C字符串的区别（优势）</h4><h5 id="（1）常数复杂度获取字符串长度"><a href="#（1）常数复杂度获取字符串长度" class="headerlink" title="（1）常数复杂度获取字符串长度"></a>（1）常数复杂度获取字符串长度</h5><p>​		C字符串获取长度时，需要遍历整个字符串，其时间复杂度为O(N)</p>

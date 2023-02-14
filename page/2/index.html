@@ -325,7 +325,7 @@
           <p><strong>1、含义</strong></p>
 <p>JVM以方法作为最基本的执行单元，“栈帧”（Stack Frame）则是用于支持JVM进行方法调用和方法执行背后的数据结构，它也是JVM运行时数据区中的虚拟机栈的栈元素。每个方法从调用开始到执行结束的过程，都对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
 <p>每一个栈帧都包括了局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
-<p><img src="/jvm-6/clipboard.png" alt="img"></p>
+<p><img src="/2019/09/18/jvm-6/clipboard.png" alt="img"></p>
 <div align="center" style="font-size:12px">图6-1 栈帧的概念结构</div>
 
 <p><strong>2、局部变量表</strong></p>
@@ -345,7 +345,7 @@
 <li>Java虚拟机的解释执行引擎称为“基于栈的执行引擎”，其中所指的“栈”就是操作数栈。<strong>如果当前线程请求的栈深度大于虚拟机所允许的最大深度，将抛出StackOverflowError异常。</strong></li>
 <li>在概念模型中，两个栈帧是相互独立的。但是大多数虚拟机的实现都会进行优化，令两个栈帧出现一部分重叠。令下面的部分操作数栈与上面的局部变量表重叠在一块，这样在方法调用的时候可以共用一部分数据，无需进行额外的参数复制传递。</li>
 </ul>
-<p><img src="/jvm-6/clipboard-1613628231657.png" alt="img"></p>
+<p><img src="/2019/09/18/jvm-6/clipboard-1613628231657.png" alt="img"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/09/18/jvm-6/#more" rel="contents">
@@ -428,7 +428,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="一、类的生命周期"><a href="#一、类的生命周期" class="headerlink" title="一、类的生命周期"></a>一、类的生命周期</h2><p><img src="/jvm-5/1.png" alt="1.png"></p>
+          <h2 id="一、类的生命周期"><a href="#一、类的生命周期" class="headerlink" title="一、类的生命周期"></a>一、类的生命周期</h2><p><img src="/2019/09/17/jvm-5/1.png" alt="1.png"></p>
 <div align="center" style="font-size:12px">图5-1 Java类的生命周期</div>
 
 <p>​		注意：解析阶段不一定按照顺序来执行，它可以在初始化阶段之后再开始，这是为了支持Java语言的运动时绑定	（也称之为动态绑定或晚期绑定）</p>
@@ -531,9 +531,9 @@
           <h4 id="1、魔数（Magic-Number）"><a href="#1、魔数（Magic-Number）" class="headerlink" title="1、魔数（Magic Number）"></a>1、魔数（Magic Number）</h4><p>​		前4个字节被称之为魔数，用于确定该文件是否为一个能被虚拟机接受的class文件</p>
 <p>​		class文件的魔数为0xCAFEBABE（咖啡宝贝）</p>
 <h4 id="2、文件版本（Version）"><a href="#2、文件版本（Version）" class="headerlink" title="2、文件版本（Version）"></a>2、文件版本（Version）</h4><p>​		第5、6个字节为次版本号，第7、8个字节为主版本号</p>
-<p><img src="/jvm-4/clipboard.png" alt="img"></p>
+<p><img src="/2019/09/16/jvm-4/clipboard.png" alt="img"></p>
 <p>​		下图为class文件版本号</p>
-<p><img src="/jvm-4/clipboard-1613627011116.png" alt="img"></p>
+<p><img src="/2019/09/16/jvm-4/clipboard-1613627011116.png" alt="img"></p>
 <h4 id="3、常量池（Constant-Pool）"><a href="#3、常量池（Constant-Pool）" class="headerlink" title="3、常量池（Constant Pool）"></a>3、常量池（Constant Pool）</h4><p>​		常量池入口，常量池主要存放字面量和符号引用</p>
           <!--noindex-->
             <div class="post-button">

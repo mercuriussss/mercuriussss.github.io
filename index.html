@@ -235,7 +235,7 @@
 <p>​		简单动态字符串（Simple Dynamic String），简称 SDS，其底层实现如下所示。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> len;     <span class="comment">//记录buf数组已使用字节数量，即字符串长度</span></span><br><span class="line">    <span class="type">int</span> <span class="built_in">free</span>;    <span class="comment">//记录buf数组未使用字节数量，即剩余空间</span></span><br><span class="line">    <span class="type">char</span> buf[];  <span class="comment">//字节数组，用于保存字符串</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/redis-d&a-1/image-20210401100415782.png" alt="image-20210401100415782"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-20210401100415782.png" alt="image-20210401100415782"></p>
 <div align="center" style="font-size:12px">图1-1 SDS数据结构示例图</div>
 
 <h4 id="2、SDS跟C字符串的区别（优势）"><a href="#2、SDS跟C字符串的区别（优势）" class="headerlink" title="2、SDS跟C字符串的区别（优势）"></a>2、SDS跟C字符串的区别（优势）</h4><h5 id="（1）常数复杂度获取字符串长度"><a href="#（1）常数复杂度获取字符串长度" class="headerlink" title="（1）常数复杂度获取字符串长度"></a>（1）常数复杂度获取字符串长度</h5><p>​		C字符串获取长度时，需要遍历整个字符串，其时间复杂度为O(N)</p>
@@ -432,7 +432,7 @@
 <h5 id="（1）内核线程实现（1：1实现）"><a href="#（1）内核线程实现（1：1实现）" class="headerlink" title="（1）内核线程实现（1：1实现）"></a>（1）内核线程实现（1：1实现）</h5><p>​		内核线程（Kernel-Level Thread，KLT）就是由操作系统内核（Kernel）支持的线程，这种线程由内核来完成线程切换操作。</p>
 <p>​		程序一般不会直接使用内核线程（那样太危险了），而是使用内核线程的一种高级接口——轻量级进程（Light Wegiht Process，LWP）来操作内核进程。轻量级进程即我们常说的线程，由于每个轻量级线程都由一个内核线程支持，也就是说 LWP 和KLT 之间是 1：1 的关系，因此也称这种模型为一对一的线程模型。</p>
 <p>​		这类似于一种代理模式，LWP 就是代理对象，而 KLT 则是被代理对象，我们把任务请求发给代理人 LWP，然后 LWP 会通过调用真实具备执行任务能力的被代理人 KLT 去执行任务。</p>
-<p><img src="/java-concurrent-3/clipboard-1613641813843.png" alt="img"></p>
+<p><img src="/2020/03/20/java-concurrent-3/clipboard-1613641813843.png" alt="img"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/03/20/java-concurrent-3/#more" rel="contents">
@@ -625,7 +625,7 @@
 </ul>
 <p>​		JMM 规定了所有的变量都存储在主内存中，每个线程都有自己的工作内存，线程的工作内存中保存的是当前线程使用到的变量值的副本（从主内存拷贝过来的）。</p>
 <p>​		线程对变量的所有操作都必须在工作内存中进行，不能直接读写主内存中的数据，线程之间的相互传值也需要通过主内存来完成。</p>
-<p><img src="/java-concurrent-2/clipboard.png" alt="img"></p>
+<p><img src="/2020/03/17/java-concurrent-2/clipboard.png" alt="img"></p>
 <div align="center" style="font-size:12px">图2-1 线程、主内存、工作内存三者的交互关系</div>
           <!--noindex-->
             <div class="post-button">
