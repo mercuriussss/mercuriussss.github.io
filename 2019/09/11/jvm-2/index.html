@@ -146,7 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text">1.使用指令创建对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%A3%80%E6%9F%A5"><span class="nav-number">1.2.</span> <span class="nav-text">2.类加载检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.3.</span> <span class="nav-text">3.类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="nav-number">1.4.</span> <span class="nav-text">4.分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%B6%E5%80%BC"><span class="nav-number">1.5.</span> <span class="nav-text">5.初始化零值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E8%AE%BE%E7%BD%AE%E5%AF%B9%E8%B1%A1%E5%A4%B4%E4%BF%A1%E6%81%AF"><span class="nav-number">1.6.</span> <span class="nav-text">6.设置对象头信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%89%A7%E8%A1%8Cinit%E6%96%B9%E6%B3%95"><span class="nav-number">1.7.</span> <span class="nav-text">7.执行init方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">对于内存分配的两种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">对于内存分配的并发问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E4%BF%9D%E9%9A%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">两种保障方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81CAS-%E5%A4%B1%E8%B4%A5%E9%87%8D%E8%AF%95"><span class="nav-number">3.1.1.</span> <span class="nav-text">1、CAS+失败重试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81TLAB"><span class="nav-number">3.1.2.</span> <span class="nav-text">2、TLAB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%85%B3%E4%BA%8ETLAB%E7%9A%84%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.3.</span> <span class="nav-text">3、关于TLAB的补充说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-number">4.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="nav-number">4.1.</span> <span class="nav-text">1.对象头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.</span> <span class="nav-text">2.实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85"><span class="nav-number">4.3.</span> <span class="nav-text">3.对齐填充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="nav-number">5.</span> <span class="nav-text">对象的访问定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E5%8F%A5%E6%9F%84"><span class="nav-number">5.1.</span> <span class="nav-text">1.使用句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88"><span class="nav-number">5.2.</span> <span class="nav-text">2.使用直接指针</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="nav-text">1.使用指令创建对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%A3%80%E6%9F%A5"><span class="nav-text">2.类加载检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-text">3.类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="nav-text">4.分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%B6%E5%80%BC"><span class="nav-text">5.初始化零值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E8%AE%BE%E7%BD%AE%E5%AF%B9%E8%B1%A1%E5%A4%B4%E4%BF%A1%E6%81%AF"><span class="nav-text">6.设置对象头信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%89%A7%E8%A1%8Cinit%E6%96%B9%E6%B3%95"><span class="nav-text">7.执行init方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-text">对于内存分配的两种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="nav-text">对于内存分配的并发问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E4%BF%9D%E9%9A%9C%E6%96%B9%E5%BC%8F"><span class="nav-text">两种保障方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81CAS-%E5%A4%B1%E8%B4%A5%E9%87%8D%E8%AF%95"><span class="nav-text">1、CAS+失败重试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81TLAB"><span class="nav-text">2、TLAB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%85%B3%E4%BA%8ETLAB%E7%9A%84%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-text">3、关于TLAB的补充说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="nav-text">1.对象头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE"><span class="nav-text">2.实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85"><span class="nav-text">3.对齐填充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="nav-text">对象的访问定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E5%8F%A5%E6%9F%84"><span class="nav-text">1.使用句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88"><span class="nav-text">2.使用直接指针</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -166,7 +166,7 @@
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -233,6 +233,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
         </div>
@@ -291,6 +298,23 @@
     
 
     <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>量子猫
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://mercuriussss.github.io/2019/09/11/jvm-2/" title="二、Java对象的创建、内存布局和访问">https://mercuriussss.github.io/2019/09/11/jvm-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
           <div class="post-tags">
               <a href="/tags/Java/" rel="tag"># Java</a>
               <a href="/tags/JVM/" rel="tag"># JVM</a>
@@ -334,6 +358,8 @@
   </span>
   <span class="author" itemprop="copyrightHolder">量子猫</span>
 </div>
+<div class="busuanzi-count">
+</div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
@@ -363,6 +389,7 @@
 
 
   
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
 

@@ -19,39 +19,41 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"mercuriussss.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="title: 一、Redis底层数据结构date: 2020-05-12 21:05:51tags: [Redis,Redis设计与实现] 一、简单动态字符串1、SDS的数据结构与示例​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。 ​		大多数情况下，Redis 用于存储字符串的结构为简单动态字符串（Simple Dyn">
+    <meta name="description" content="一、简单动态字符串1、SDS的数据结构与示例​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。 ​		大多数情况下，Redis 用于存储字符串的结构为简单动态字符串（Simple Dynamic String），简称 SDS，其底层实现如下所示。 12345struct sdshdr &amp;#123;    int len;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="量子猫">
-<meta property="og:url" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/index.html">
+<meta property="og:title" content="一、Redis底层数据结构">
+<meta property="og:url" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/index.html">
 <meta property="og:site_name" content="量子猫">
-<meta property="og:description" content="title: 一、Redis底层数据结构date: 2020-05-12 21:05:51tags: [Redis,Redis设计与实现] 一、简单动态字符串1、SDS的数据结构与示例​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。 ​		大多数情况下，Redis 用于存储字符串的结构为简单动态字符串（Simple Dyn">
+<meta property="og:description" content="一、简单动态字符串1、SDS的数据结构与示例​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。 ​		大多数情况下，Redis 用于存储字符串的结构为简单动态字符串（Simple Dynamic String），简称 SDS，其底层实现如下所示。 12345struct sdshdr &amp;#123;    int len;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-20210401100415782.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-2.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-3.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-4.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-5.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-6.jpg">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-7.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-8.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-9.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-10.png">
-<meta property="og:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-11.png">
-<meta property="article:published_time" content="2023-02-13T10:24:21.721Z">
-<meta property="article:modified_time" content="2023-03-10T11:05:27.735Z">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-20210401100415782.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-2.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-3.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-4.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-5.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-6.jpg">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-7.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-8.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-9.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-10.png">
+<meta property="og:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-11.png">
+<meta property="article:published_time" content="2020-05-12T13:05:51.000Z">
+<meta property="article:modified_time" content="2023-03-10T11:10:04.818Z">
 <meta property="article:author" content="量子猫">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="Redis设计与实现">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/image-20210401100415782.png">
+<meta name="twitter:image" content="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/image-20210401100415782.png">
 
 
-<link rel="canonical" href="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/">
+<link rel="canonical" href="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/2023/02/13/redis-d&a-1/","path":"2023/02/13/redis-d&a-1/","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mercuriussss.github.io/2020/05/12/redis-d&a-1/","path":"2020/05/12/redis-d&a-1/","title":"一、Redis底层数据结构"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title> | 量子猫</title>
+<title>一、Redis底层数据结构 | 量子猫</title>
   
 
 
@@ -151,7 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.</span> <span class="nav-text">一、简单动态字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81SDS%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1、SDS的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81SDS%E8%B7%9FC%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E4%BC%98%E5%8A%BF%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">2、SDS跟C字符串的区别（优势）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%B8%B8%E6%95%B0%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%8E%B7%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6"><span class="nav-number">1.2.1.</span> <span class="nav-text">（1）常数复杂度获取字符串长度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E6%9D%9C%E7%BB%9D%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA"><span class="nav-number">1.2.2.</span> <span class="nav-text">（2）杜绝缓存区溢出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E5%87%8F%E5%B0%91%E4%BF%AE%E6%94%B9%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%97%B6%E7%9A%84%E5%86%85%E5%AD%98%E9%87%8D%E5%88%86%E9%85%8D%E6%AC%A1%E6%95%B0"><span class="nav-number">1.2.3.</span> <span class="nav-text">（3）减少修改字符串时的内存重分配次数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%884%EF%BC%89%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8"><span class="nav-number">1.2.4.</span> <span class="nav-text">（4）二进制安全</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81SDS%E5%85%BC%E5%AE%B9%E9%83%A8%E5%88%86C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3、SDS兼容部分C字符串函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%93%BE%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">二、链表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E9%93%BE%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text">1、链表的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E9%93%BE%E8%A1%A8%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">2、链表的特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AD%97%E5%85%B8"><span class="nav-number">3.</span> <span class="nav-text">三、字典</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">1、字典的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%B8%8E%E9%94%AE%E5%86%B2%E7%AA%81"><span class="nav-number">3.2.</span> <span class="nav-text">2、哈希算法与键冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E6%B8%90%E8%BF%9B%E5%BC%8Frehash"><span class="nav-number">3.3.</span> <span class="nav-text">3、渐进式rehash</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89rehash-%E5%AE%9A%E4%B9%89"><span class="nav-number">3.3.1.</span> <span class="nav-text">（1）rehash 定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E8%B4%9F%E8%BD%BD%E5%9B%A0%E5%AD%90%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="nav-number">3.3.2.</span> <span class="nav-text">（2）负载因子的计算公式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89rehash-%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6"><span class="nav-number">3.3.3.</span> <span class="nav-text">（3）rehash 触发条件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%884%EF%BC%89rehash-%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.3.4.</span> <span class="nav-text">（4）rehash 详细步骤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%885%EF%BC%89rehash-%E6%9C%9F%E9%97%B4%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.5.</span> <span class="nav-text">（5）rehash 期间的操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%B7%B3%E8%B7%83%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">四、跳跃表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E8%B7%B3%E8%B7%83%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.1.</span> <span class="nav-text">1、跳跃表的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E8%B7%B3%E8%B7%83%E8%A1%A8%E7%9A%84%E5%A2%9E%E5%88%A0%E6%9F%A5"><span class="nav-number">4.2.</span> <span class="nav-text">2、跳跃表的增删查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88"><span class="nav-number">5.</span> <span class="nav-text">五、整数集合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.1.</span> <span class="nav-text">1、整数集合的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88%E7%9A%84%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7"><span class="nav-number">5.2.</span> <span class="nav-text">2、整数集合的升级和降级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">5.2.1.</span> <span class="nav-text">（1）升级和降级的定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E5%8D%87%E7%BA%A7%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.2.2.</span> <span class="nav-text">（2）升级的步骤</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88%E5%8D%87%E7%BA%A7%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">5.3.</span> <span class="nav-text">3、整数集合升级的好处</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E6%8F%90%E9%AB%98%E7%81%B5%E6%B4%BB%E6%80%A7"><span class="nav-number">5.3.1.</span> <span class="nav-text">（1）提高灵活性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E8%8A%82%E7%BA%A6%E5%86%85%E5%AD%98"><span class="nav-number">5.3.2.</span> <span class="nav-text">（2）节约内存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8"><span class="nav-number">6.</span> <span class="nav-text">六、压缩列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">6.1.</span> <span class="nav-text">1、压缩列表的数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E8%BF%9E%E9%94%81%E6%9B%B4%E6%96%B0"><span class="nav-number">6.2.</span> <span class="nav-text">2、连锁更新</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">一、简单动态字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81SDS%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1、SDS的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81SDS%E8%B7%9FC%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E4%BC%98%E5%8A%BF%EF%BC%89"><span class="nav-text">2、SDS跟C字符串的区别（优势）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%B8%B8%E6%95%B0%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%8E%B7%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6"><span class="nav-text">（1）常数复杂度获取字符串长度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E6%9D%9C%E7%BB%9D%E7%BC%93%E5%AD%98%E5%8C%BA%E6%BA%A2%E5%87%BA"><span class="nav-text">（2）杜绝缓存区溢出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89%E5%87%8F%E5%B0%91%E4%BF%AE%E6%94%B9%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%97%B6%E7%9A%84%E5%86%85%E5%AD%98%E9%87%8D%E5%88%86%E9%85%8D%E6%AC%A1%E6%95%B0"><span class="nav-text">（3）减少修改字符串时的内存重分配次数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%884%EF%BC%89%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8"><span class="nav-text">（4）二进制安全</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81SDS%E5%85%BC%E5%AE%B9%E9%83%A8%E5%88%86C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-text">3、SDS兼容部分C字符串函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%93%BE%E8%A1%A8"><span class="nav-text">二、链表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E9%93%BE%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1、链表的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E9%93%BE%E8%A1%A8%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-text">2、链表的特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AD%97%E5%85%B8"><span class="nav-text">三、字典</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1、字典的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%B8%8E%E9%94%AE%E5%86%B2%E7%AA%81"><span class="nav-text">2、哈希算法与键冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E6%B8%90%E8%BF%9B%E5%BC%8Frehash"><span class="nav-text">3、渐进式rehash</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89rehash-%E5%AE%9A%E4%B9%89"><span class="nav-text">（1）rehash 定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E8%B4%9F%E8%BD%BD%E5%9B%A0%E5%AD%90%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="nav-text">（2）负载因子的计算公式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%883%EF%BC%89rehash-%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6"><span class="nav-text">（3）rehash 触发条件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%884%EF%BC%89rehash-%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4"><span class="nav-text">（4）rehash 详细步骤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%885%EF%BC%89rehash-%E6%9C%9F%E9%97%B4%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-text">（5）rehash 期间的操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%B7%B3%E8%B7%83%E8%A1%A8"><span class="nav-text">四、跳跃表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E8%B7%B3%E8%B7%83%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1、跳跃表的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E8%B7%B3%E8%B7%83%E8%A1%A8%E7%9A%84%E5%A2%9E%E5%88%A0%E6%9F%A5"><span class="nav-text">2、跳跃表的增删查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88"><span class="nav-text">五、整数集合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1、整数集合的数据结构与示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88%E7%9A%84%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7"><span class="nav-text">2、整数集合的升级和降级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E5%8D%87%E7%BA%A7%E5%92%8C%E9%99%8D%E7%BA%A7%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">（1）升级和降级的定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E5%8D%87%E7%BA%A7%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="nav-text">（2）升级的步骤</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88%E5%8D%87%E7%BA%A7%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-text">3、整数集合升级的好处</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E6%8F%90%E9%AB%98%E7%81%B5%E6%B4%BB%E6%80%A7"><span class="nav-text">（1）提高灵活性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E8%8A%82%E7%BA%A6%E5%86%85%E5%AD%98"><span class="nav-text">（2）节约内存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8"><span class="nav-text">六、压缩列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">1、压缩列表的数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E8%BF%9E%E9%94%81%E6%9B%B4%E6%96%B0"><span class="nav-text">2、连锁更新</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -171,7 +173,7 @@
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -198,7 +200,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/2023/02/13/redis-d&a-1/">
+    <link itemprop="mainEntityOfPage" href="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/xz.jpg">
@@ -211,12 +213,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 量子猫">
+      <meta itemprop="name" content="一、Redis底层数据结构 | 量子猫">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          一、Redis底层数据结构
         </h1>
 
         <div class="post-meta-container">
@@ -227,17 +229,24 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-02-13 18:24:21" itemprop="dateCreated datePublished" datetime="2023-02-13T18:24:21+08:00">2023-02-13</time>
+      <time title="创建时间：2020-05-12 21:05:51" itemprop="dateCreated datePublished" datetime="2020-05-12T21:05:51+08:00">2020-05-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-10 19:05:27" itemprop="dateModified" datetime="2023-03-10T19:05:27+08:00">2023-03-10</time>
+      <time title="修改时间：2023-03-10 19:10:04" itemprop="dateModified" datetime="2023-03-10T19:10:04+08:00">2023-03-10</time>
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
         </div>
@@ -247,12 +256,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>title: 一、Redis底层数据结构<br>date: 2020-05-12 21:05:51<br>tags: [Redis,Redis设计与实现]</p>
-<h3 id="一、简单动态字符串"><a href="#一、简单动态字符串" class="headerlink" title="一、简单动态字符串"></a>一、简单动态字符串</h3><h4 id="1、SDS的数据结构与示例"><a href="#1、SDS的数据结构与示例" class="headerlink" title="1、SDS的数据结构与示例"></a>1、SDS的数据结构与示例</h4><p>​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。</p>
+        <h3 id="一、简单动态字符串"><a href="#一、简单动态字符串" class="headerlink" title="一、简单动态字符串"></a>一、简单动态字符串</h3><h4 id="1、SDS的数据结构与示例"><a href="#1、SDS的数据结构与示例" class="headerlink" title="1、SDS的数据结构与示例"></a>1、SDS的数据结构与示例</h4><p>​		Redis 是用 C 语言开发的一个高性能缓存框架，支持五种基本的数据结构，这些数据结构的底层也是由 C 语言实现的。</p>
 <p>​		大多数情况下，Redis 用于存储字符串的结构为简单动态字符串（Simple Dynamic String），简称 SDS，其底层实现如下所示。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> len;     <span class="comment">//记录buf数组已使用字节数量，即字符串长度</span></span><br><span class="line">    <span class="type">int</span> <span class="built_in">free</span>;    <span class="comment">//记录buf数组未使用字节数量，即剩余空间</span></span><br><span class="line">    <span class="type">char</span> buf[];  <span class="comment">//字节数组，用于保存字符串</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2023/02/13/redis-d&a-1/image-20210401100415782.png" alt="image-20210401100415782"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-20210401100415782.png" alt="image-20210401100415782"></p>
 <div align="center" style="font-size:12px">图1-1 SDS数据结构示例图</div>
 
 <h4 id="2、SDS跟C字符串的区别（优势）"><a href="#2、SDS跟C字符串的区别（优势）" class="headerlink" title="2、SDS跟C字符串的区别（优势）"></a>2、SDS跟C字符串的区别（优势）</h4><h5 id="（1）常数复杂度获取字符串长度"><a href="#（1）常数复杂度获取字符串长度" class="headerlink" title="（1）常数复杂度获取字符串长度"></a>（1）常数复杂度获取字符串长度</h5><p>​		C字符串获取长度时，需要遍历整个字符串，其时间复杂度为O(N)</p>
@@ -317,7 +325,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">    listNode * head; <span class="comment">// 表头节点</span></span><br><span class="line">    listNode * tail; <span class="comment">// 表尾节点</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> len; <span class="comment">// 链表所包含的节点数量</span></span><br><span class="line">    <span class="type">void</span> *(*dup)(<span class="type">void</span> *ptr); <span class="comment">// 节点值复制函数</span></span><br><span class="line">    <span class="type">void</span> (*<span class="built_in">free</span>)(<span class="type">void</span> *ptr); <span class="comment">// 节点值释放函数</span></span><br><span class="line">    <span class="type">int</span> (*match)(<span class="type">void</span> *ptr,<span class="type">void</span> *key); <span class="comment">// 节点值对比函数</span></span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> * <span class="title">prev</span>;</span> <span class="comment">// 前置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> * <span class="title">next</span>;</span> <span class="comment">// 后置节点</span></span><br><span class="line">    <span class="type">void</span> * value; <span class="comment">//节点的值</span></span><br><span class="line">&#125;listNode;</span><br></pre></td></tr></table></figure>
 
 <p>​		下图为一个 list 结构和三个 listNode 结构所组成的链表</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-2.png" alt="image-2"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-2.png" alt="image-2"></p>
 <div align="center" style="font-size:12px">图1-2 链表数据结构示例图</div>
 
 <h4 id="2、链表的特性"><a href="#2、链表的特性" class="headerlink" title="2、链表的特性"></a>2、链表的特性</h4><ul>
@@ -332,7 +340,7 @@
 <p>​		以下为 Redis 的字典数据结构定义，其中 type 和 privdata 属性是针对不同类型的键值对，为创建多态字典而设置的。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字典</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    dictType *type;<span class="comment">//类型特定函数</span></span><br><span class="line">    <span class="type">void</span> *privdata;<span class="comment">//私有数据</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];<span class="comment">//哈希表</span></span><br><span class="line">    <span class="type">int</span> rehashidx; <span class="comment">// rehash索引，当rehash不在进行时，值为-1</span></span><br><span class="line">&#125; dict;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类型特定函数</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictType</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="title function_">int</span> <span class="params">(*hashFunction)</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *key)</span>;<span class="comment">//计算哈希值的函数</span></span><br><span class="line">    <span class="type">void</span> *(*keyDup)(<span class="type">void</span> *privdata, <span class="type">const</span> <span class="type">void</span> *key);<span class="comment">//复制键的函数</span></span><br><span class="line">    <span class="type">void</span> *(*valDup)(<span class="type">void</span> *privdata, <span class="type">const</span> <span class="type">void</span> *obj);<span class="comment">//复制值的函数</span></span><br><span class="line">    <span class="type">int</span> (*keyCompare)(<span class="type">void</span> *privdata, <span class="type">const</span> <span class="type">void</span> *key1, <span class="type">const</span> <span class="type">void</span> *key2);<span class="comment">//对比键的函数</span></span><br><span class="line">    <span class="type">void</span> (*keyDestructor)(<span class="type">void</span> *privdata, <span class="type">void</span> *key);<span class="comment">//销毁键的函数</span></span><br><span class="line">    <span class="type">void</span> (*valDestructor)(<span class="type">void</span> *privdata, <span class="type">void</span> *obj);<span class="comment">//销毁值的函数</span></span><br><span class="line">&#125; dictType;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 哈希表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">    dictEntry **table;&#123;<span class="comment">//哈希表数组</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> size;<span class="comment">//哈希表大小</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> sizemask;<span class="comment">//哈希表大小掩码，用于计算索引值，总是等于size-1</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> used;<span class="comment">//该哈希表已有节点的数量</span></span><br><span class="line">&#125; dictht;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 哈希表节点</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> *key;<span class="comment">//键</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span>&#123;</span> <span class="comment">//值</span></span><br><span class="line">        <span class="type">void</span> *val;</span><br><span class="line">        uint64_tu64;</span><br><span class="line">        int64_ts64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span><span class="comment">//指向下个哈希表节点，形成链表</span></span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
 <p>​		下图为一个普通状态下（没有进行rehash）的字典。</p>
-<p>​		<img src="/2023/02/13/redis-d&a-1/image-3.png" alt="image-3"></p>
+<p>​		<img src="/2020/05/12/redis-d&a-1/image-3.png" alt="image-3"></p>
 <div align="center" style="font-size:12px">图1-3 字典数据结构示例图</div>
 
 <h4 id="2、哈希算法与键冲突"><a href="#2、哈希算法与键冲突" class="headerlink" title="2、哈希算法与键冲突"></a>2、哈希算法与键冲突</h4><p>​		当 Redis 要将一个新的键值对添加到字典中时，程序要先根据key计算出哈希值和索引值，目前 Redis 用于计算哈希值的算法为 <strong>MurmurHash2 一致性哈希算法</strong>，其优点是计算速度快、随机分布性良好，而 MurmurHash 算法最新版本为 MurmurHash3 。</p>
@@ -340,7 +348,7 @@
 
 <p>​		在计算完哈希值和索引值后，程序会将节点放到对应的索引位置上，如果遇到键冲突则使用链地址法来解决，并且从速度考虑，每次添加新节点都会添加到表头的位置，即头插法。</p>
 <p>​		如下图所示，新增的键值对k2会添加到k1前面。</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-4.png" alt="image-4"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-4.png" alt="image-4"></p>
 <div align="center" style="font-size:12px">图1-4 链地址法解决键冲突</div>
 
 <h4 id="3、渐进式rehash"><a href="#3、渐进式rehash" class="headerlink" title="3、渐进式rehash"></a>3、渐进式rehash</h4><h5 id="（1）rehash-定义"><a href="#（1）rehash-定义" class="headerlink" title="（1）rehash 定义"></a>（1）rehash 定义</h5><p>​		为了让哈希表的负载因子维持在一个合理的范围内，当哈希表保存的键值对数量太多或太少时，程序就会触发哈希表的扩展或收缩，这两个行为都是通过对字典的哈希表进行 rehash 操作来完成。</p>
@@ -376,11 +384,11 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">    structz skiplistNode *header, *tail;<span class="comment">//表头节点和表尾节点</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> length;<span class="comment">//表中节点的数量</span></span><br><span class="line">    <span class="type">int</span> level;<span class="comment">//表中层数最大的节点的层数</span></span><br><span class="line">&#125; zskiplist;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span><span class="comment">//层，新增结点时根据幂次定律随机生成的一个介于1到32之间的值</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span><span class="comment">//前进指针</span></span><br><span class="line">        <span class="type">unsigned</span> <span class="type">int</span> span;<span class="comment">//跨度，指两个结点之间的距离</span></span><br><span class="line">    &#125; level[];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span><span class="comment">//后退指针</span></span><br><span class="line">    <span class="type">double</span> score;<span class="comment">//分值</span></span><br><span class="line">    robj *obj;<span class="comment">//成员对象</span></span><br><span class="line">&#125; zskiplistNode;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>​		</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-5.png" alt="image-5"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-5.png" alt="image-5"></p>
 <div align="center" style="font-size:12px">图1-5 跳表的数据结构示例图</div>
 
 <h4 id="2、跳跃表的增删查"><a href="#2、跳跃表的增删查" class="headerlink" title="2、跳跃表的增删查"></a>2、跳跃表的增删查</h4><p>​		跳表在查询时，会先从最高层索引开始查询，如果查询的值大于当前结点，则跳到下一个节点进行对比，如果查询的值小于下个节点的值，则说明值在两个节点中间，这时程序就会通过后退指针，退回到原先的节点，并且访问原先节点的下一层，这样一层层递进进行判断，如下图中的黄色路线。</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-6.jpg" alt="image-6"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-6.jpg" alt="image-6"></p>
 <div align="center" style="font-size:12px">图1-6 跳表的查询示例图</div>
 
 <p>​		插入和删除也是同理，在查询到对应的数据位置后进行相应操作，同时还需要维护一下跳表的索引数据。</p>
@@ -390,7 +398,7 @@
 <p>​		以下为 Redis 的整数集合数据结构定义与示例图，其中 encoding 属性存储着 contents 数组的真正数据类型。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span></span><br><span class="line">    <span class="type">uint32_t</span> encoding; <span class="comment">//编码方式，有16、32、64三种格式，初始值默认为INTSET_ENC_INT16</span></span><br><span class="line">    <span class="type">uint32_t</span> length;<span class="comment">//集合包含的元素数量</span></span><br><span class="line">    <span class="type">int8_t</span> contents[];<span class="comment">//保存元素的数组，元素类型并不一定是int8_t类型，数组中的元素从小到大排列</span></span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
 
-<p>​		<img src="/2023/02/13/redis-d&a-1/image-7.png" alt="image-7"></p>
+<p>​		<img src="/2020/05/12/redis-d&a-1/image-7.png" alt="image-7"></p>
 <div align="center" style="font-size:12px">图1-7 整数集合的数据示例图</div>
 
 <h4 id="2、整数集合的升级和降级"><a href="#2、整数集合的升级和降级" class="headerlink" title="2、整数集合的升级和降级"></a>2、整数集合的升级和降级</h4><h5 id="（1）升级和降级的定义"><a href="#（1）升级和降级的定义" class="headerlink" title="（1）升级和降级的定义"></a>（1）升级和降级的定义</h5><p>​		<strong>升级</strong>：当新元素添加到整数集合，且该新元素的类型比该整数集合现有类型要长的时候，整数集合需要先升级才能容纳下这个新元素，例如某个整数集合的类型是 INSET_ENC_INT32 ，现在有个 int64_t 类型的整数值要添加进去，就会触发整数集合的升级操作。</p>
@@ -398,7 +406,7 @@
 <h5 id="（2）升级的步骤"><a href="#（2）升级的步骤" class="headerlink" title="（2）升级的步骤"></a>（2）升级的步骤</h5><p>​		1）根据新元素的类型，扩展数据集合底层数组的空间大小，并为新元素分配空间</p>
 <p>​		2）将底层数组现有的所有元素，数据类型都转换成新类型，并且转换后还要摆放到正确的位置上，以维持底层数组的有序性。注意这里在转换时是 <strong>从后往前</strong> 进行调整的，因为这样才不会造成数据覆盖。</p>
 <p>​		3）将新元素添加到底层数组里（由于新元素长度会大于所有现有元素的长度，所以新元素如果是正数则放在最末尾，表示它最大，如果是负数则放在最开头，表示它最小）。</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-8.png" alt="image-8"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-8.png" alt="image-8"></p>
 <div align="center" style="font-size:12px">图1-8 整数集合的升级过程图</div>
 
 <h4 id="3、整数集合升级的好处"><a href="#3、整数集合升级的好处" class="headerlink" title="3、整数集合升级的好处"></a>3、整数集合升级的好处</h4><h5 id="（1）提高灵活性"><a href="#（1）提高灵活性" class="headerlink" title="（1）提高灵活性"></a>（1）提高灵活性</h5><p>​		因为 C 语言是静态类型语言，无法使用同一类型的数组来保存不同类型的数据，例如 int16_t 的数组只能保存 int16_t 的数据，保存不了 int32_t 的数据，会提示类型错误。</p>
@@ -407,7 +415,7 @@
 <h3 id="六、压缩列表"><a href="#六、压缩列表" class="headerlink" title="六、压缩列表"></a>六、压缩列表</h3><h4 id="1、压缩列表的数据结构"><a href="#1、压缩列表的数据结构" class="headerlink" title="1、压缩列表的数据结构"></a>1、压缩列表的数据结构</h4><p>​		压缩列表（ziplist）是列表键和哈希键的底层实现之一，顾名思义，压缩，它是 Redis 为了节约内存而开发出来的 <strong>顺序型数据结构</strong>，由一系列特殊编码的 <strong>连续内存块</strong> 组成，用空间换时间。</p>
 <p>​		一个压缩列表可以包含任意多个节点，每个节点可以保存一个字节数组或者一个整数值。</p>
 <p>​		下图是压缩列表在内存中的布局（<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016901154">图片出处</a>）</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-9.png" alt="image-9"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-9.png" alt="image-9"></p>
 <div align="center" style="font-size:12px">图1-9 压缩列表的内存布局图</div>
 
 <ul>
@@ -436,11 +444,11 @@
 <li><p><strong>encoding</strong>：当前节点的编码规则，用来表示不同长度的字符串或整数，总共可分为 9 类，整数节点 6 类，字符串节点 3 类</p>
 <ul>
 <li><p>整数节点的 encoding 的长度为8位，其中<strong>高2位</strong>用来区分整数节点和字符串节点（高2位为11时是整数节点，00、01、10则是字符串节点），<strong>低6位</strong>用来区分整数节点的类型，相同 encoding 类型的<strong>整数节点</strong> data 长度是固定的</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-10.png" alt="image-10"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-10.png" alt="image-10"></p>
 <div align="center" style="font-size:12px">图1-10 压缩列表的整数节点类型图</div>
 </li>
 <li><p>字符串节点的 encoding 有8、16、40位三种长度，相同encoding类型的<strong>字符串节点</strong>，data长度取决于 encoding 后半部分的值。除去开头的 2 位数字，8 位长度剩下的 6 位、16 位长度剩下的 12 位都代表着 data 的实际长度，而 40 位长度则是再去掉 6 位后剩下的 32 位才代表 data 的实际长度，如下图所示。</p>
-<p><img src="/2023/02/13/redis-d&a-1/image-11.png" alt="image-11"></p>
+<p><img src="/2020/05/12/redis-d&a-1/image-11.png" alt="image-11"></p>
 <div align="center" style="font-size:12px">图1-11 压缩列表的字符串节点类型图</div></li>
 </ul>
 </li>
@@ -470,6 +478,27 @@
     
 
     <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>量子猫
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://mercuriussss.github.io/2020/05/12/redis-d&a-1/" title="一、Redis底层数据结构">https://mercuriussss.github.io/2020/05/12/redis-d&a-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+              <a href="/tags/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" rel="tag"># Redis设计与实现</a>
+          </div>
 
         
 
@@ -506,6 +535,8 @@
   </span>
   <span class="author" itemprop="copyrightHolder">量子猫</span>
 </div>
+<div class="busuanzi-count">
+</div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
@@ -535,6 +566,7 @@
 
 
   
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
 
